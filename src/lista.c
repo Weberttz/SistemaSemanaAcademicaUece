@@ -34,7 +34,14 @@ int listaVazia(ListaEncadeada *lista){
 int inserirNoInicio(ListaEncadeada *lista, Estudante estudante){
     No *novo = malloc(sizeof(No));
     if (novo == NULL) {
-        printf("Erro na alocação do novo Nó!");
+        printf("Erro na alocação do novo Nó!\n");
+        return 0;
+    }
+
+    No *no_busca = buscarElemento(lista, estudante);
+
+    if(no_busca != NULL){
+        printf("O estudante com essa matrícula já existe na lista!\n");
         return 0;
     }
 
@@ -49,6 +56,12 @@ int inserirNoFinal(ListaEncadeada *lista, Estudante estudante){
     No *novo = malloc(sizeof(No));
     if (novo == NULL) {
         printf("Erro na alocação do novo Nó!");
+        return 0;
+    }
+
+    No *no_busca = buscarElemento(lista, estudante);
+    if(no_busca != NULL){
+        printf("O estudante com essa matrícula já existe na lista\n");
         return 0;
     }
 
@@ -75,12 +88,13 @@ int imprimirLista(ListaEncadeada *lista){
     No *aux = lista->inicio;
 
     if(listaVazia(lista)){
-        printf("Lista vazia!");
+        printf("Lista vazia!\n");
         return 0;
     }
 
-    Estudante estudante = aux->estudante;
+    Estudante estudante;
     while(aux != NULL){
+        estudante = aux->estudante;
         printf("Matrícula: %d\n", estudante.matricula);
         printf("Nome: %s\n", estudante.nome);
         aux = aux->prox;
@@ -93,13 +107,14 @@ No *buscarElemento(ListaEncadeada *lista, Estudante estudante){
     No *aux = lista->inicio;
 
     if(listaVazia(lista)) {
-        printf("Lista vazia!");
+        printf("Lista vazia!\n");
         return NULL;
     }
     
     while(aux != NULL){
         if (aux->estudante.matricula == estudante.matricula)
             return aux;
+        aux = aux->prox;
     }
 
     return NULL;
