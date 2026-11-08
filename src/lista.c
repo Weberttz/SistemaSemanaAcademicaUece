@@ -15,8 +15,7 @@ struct ListaEncadeada{
 ListaEncadeada *criarLista(){
     ListaEncadeada *nova = (ListaEncadeada*) malloc(sizeof(ListaEncadeada));
     if (nova != NULL) {
-        nova->inicio = NULL;
-        nova->tamanho = 0;
+       inicializarLista(nova);
     }
     return nova;
 }
@@ -105,11 +104,6 @@ int imprimirLista(ListaEncadeada *lista){
 
 No *buscarElemento(ListaEncadeada *lista, int matricula){
     No *aux = lista->inicio;
-
-    if(listaVazia(lista)) {
-        printf("Lista vazia!\n");
-        return NULL;
-    }
     
     while(aux != NULL){
         if (aux->estudante.matricula == matricula)

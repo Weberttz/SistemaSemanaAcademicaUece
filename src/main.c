@@ -1,10 +1,20 @@
 #include <stdio.h>
+#include <string.h>
 #include "../include/lista.h"
+
+#define MAX_CARACTERES 50
+
+Estudante criarEstudante(int matricula, char nome[]){
+    Estudante estudante;
+    estudante.matricula = matricula;
+    strcpy(estudante.nome, nome);
+    return estudante;
+}
 
 int main(){
 
-    Estudante estudante1 = {123, "Jonh_Webert"};
-    Estudante estudante2 = {124, "Antônio_Frotta"};
+    char comando[MAX_CARACTERES];
+    int rodando = 1;
 
     // criar lista, utilizando encapsulamento
     ListaEncadeada *lista = criarLista();
@@ -14,14 +24,29 @@ int main(){
         return 1;
     }
 
-    inicializarLista(lista);
-    inserirNoInicio(lista, estudante1);
-    imprimirLista(lista);
-
-    inserirNoInicio(lista, estudante2);
-    imprimirLista(lista);
+    while(rodando && scanf("%s", comando) != EOF){
+        // strcmp retorna 0 se as strings forem idênticas
+        if (strcmp(comando, "INSCREVER") == 0) {
+            int matricula; char nome[60];
+            scanf("%d", &matricula);
+            scanf("%s", nome);
+            
+            Estudante estudante = criarEstudante(matricula, nome);
+            inserirNoFinal(lista, estudante);
+        }
+        else if (strcmp(comando, "IMPRIMIR") == 0) {
+            imprimirLista(lista);
+        }
+        else if (strcmp(comando, "FIM") == 0) {
+            rodando = 0;
+        }
+        else {
+            // Comando desconhecido (opcional)
+            // printf("Comando invalido: %s\n", comando);
+        }
+    }
 
     finalizarLista(lista);
-
+    
     return 0;
 }
