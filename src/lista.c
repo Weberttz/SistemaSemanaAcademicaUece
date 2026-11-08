@@ -38,10 +38,10 @@ int inserirNoInicio(ListaEncadeada *lista, Estudante estudante){
         return 0;
     }
 
-    No *no_busca = buscarElemento(lista, estudante);
+    No *no_busca = buscarElemento(lista, estudante.matricula);
 
     if(no_busca != NULL){
-        printf("O estudante com essa matrícula já existe na lista!\n");
+        printf("Um estudante com essa matrícula já existe na lista!\n");
         return 0;
     }
 
@@ -59,9 +59,9 @@ int inserirNoFinal(ListaEncadeada *lista, Estudante estudante){
         return 0;
     }
 
-    No *no_busca = buscarElemento(lista, estudante);
+    No *no_busca = buscarElemento(lista, estudante.matricula);
     if(no_busca != NULL){
-        printf("O estudante com essa matrícula já existe na lista\n");
+        printf("Um estudante com essa matrícula já existe na lista\n");
         return 0;
     }
 
@@ -103,7 +103,7 @@ int imprimirLista(ListaEncadeada *lista){
     return 1;
 }
 
-No *buscarElemento(ListaEncadeada *lista, Estudante estudante){
+No *buscarElemento(ListaEncadeada *lista, int matricula){
     No *aux = lista->inicio;
 
     if(listaVazia(lista)) {
@@ -112,7 +112,7 @@ No *buscarElemento(ListaEncadeada *lista, Estudante estudante){
     }
     
     while(aux != NULL){
-        if (aux->estudante.matricula == estudante.matricula)
+        if (aux->estudante.matricula == matricula)
             return aux;
         aux = aux->prox;
     }
@@ -120,11 +120,11 @@ No *buscarElemento(ListaEncadeada *lista, Estudante estudante){
     return NULL;
 }
 
-int alterarElemento(ListaEncadeada *lista, Estudante estudanteSubstiuido, Estudante estudanteNovo){
-    No *no_substiuido = buscarElemento(lista, estudanteSubstiuido);
+int alterarElemento(ListaEncadeada *lista, int matriculaEstudanteSubstiuido, Estudante estudanteNovo){
+    No *no_substiuido = buscarElemento(lista, matriculaEstudanteSubstiuido);
 
     if(no_substiuido == NULL) {
-        printf("Elemento não foi encontrado, proibido alterar!");
+        printf("Estudante não foi encontrado, proibido alterar!");
         return 0;
     }
 
@@ -132,15 +132,16 @@ int alterarElemento(ListaEncadeada *lista, Estudante estudanteSubstiuido, Estuda
     return 1;
 }
 
-int deletarUmElemento(ListaEncadeada *lista, Estudante estudante){
-    No *alvo = buscarElemento(lista, estudante);
+int deletarUmElemento(ListaEncadeada *lista, int matricula){
+    No *alvo = buscarElemento(lista, matricula);
     No *aux = lista->inicio;
 
     if(alvo == NULL) {
-        printf("Elemento não encontrado, proibido deletar!");
+        printf("Estudante não encontrado, proibido deletar!");
         return 0;
     }
 
+    // Se alvo está no início da lista, libera corretamente
     if(lista->inicio == alvo){
         lista->inicio = alvo->prox;
         free(alvo);
@@ -148,6 +149,7 @@ int deletarUmElemento(ListaEncadeada *lista, Estudante estudante){
         return 1;
     }
 
+    // Se alvo está na cauda da lista
     while(aux != NULL && aux->prox !=alvo){
         aux = aux->prox;
     }
