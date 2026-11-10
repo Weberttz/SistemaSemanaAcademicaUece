@@ -2,15 +2,6 @@
 #include <string.h>
 #include "../include/lista.h"
 
-#define MAX_CARACTERES 50
-
-Estudante criarEstudante(int matricula, char nome[]){
-    Estudante estudante;
-    estudante.matricula = matricula;
-    strcpy(estudante.nome, nome);
-    return estudante;
-}
-
 int main(){
 
     char comando[MAX_CARACTERES];
@@ -31,8 +22,7 @@ int main(){
             scanf("%d", &matricula);
             scanf("%s", nome);
             
-            Estudante estudante = criarEstudante(matricula, nome);
-            inserirNoFinal(lista, estudante);
+            inserirNoFinal(lista, matricula, nome);
         }
         else if (strcmp(comando, "IMPRIMIR") == 0) {
             imprimirLista(lista);
@@ -41,7 +31,6 @@ int main(){
             rodando = 0;
         }
         else {
-            // Comando desconhecido (opcional)
             // printf("Comando invalido: %s\n", comando);
         }
     }
