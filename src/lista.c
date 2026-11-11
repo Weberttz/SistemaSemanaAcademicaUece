@@ -13,14 +13,14 @@ typedef struct No{
     struct No *prox;
 }No;
 
-struct ListaEncadeada{
+typedef struct ListaInscritos{
     No *inicio;
     No *fim;
     size_t tamanho;
-};
+}ListaInscritos;
 
-static No *buscarElemento(ListaEncadeada *lista, int matricula){
-    No *aux = lista->inicio;
+static No *buscarElemento(ListaPtr l, int matricula){
+    No *aux = l->inicio;
     
     while(aux != NULL){
         if (aux->estudante.matricula == matricula)
@@ -31,88 +31,87 @@ static No *buscarElemento(ListaEncadeada *lista, int matricula){
     return NULL;
 }
 
-ListaEncadeada *criarLista(){
-    ListaEncadeada *nova = (ListaEncadeada*) malloc(sizeof(ListaEncadeada));
-    if (nova != NULL) {
-       inicializarLista(nova);
+ListaPtr criarLista(){
+    ListaPtr l = malloc(sizeof(ListaInscritos));
+    if (l != NULL) {
+       inicializarLista(l);
     }
-    return nova;
+    return l;
 }
 
-Estudante criarEstudante(int matricula, char nome[MAX_CARACTERES]){
+Estudante criarEstudante(int matricula, const char *nome){
     Estudante estudante;
-    strcpy(estudante.nome, nome);
+    snprintf(estudante.nome, MAX_CARACTERES, "%s", nome);
     estudante.matricula = matricula;
     return estudante;
 }
 
-int inicializarLista(ListaEncadeada *lista){
-   lista->inicio = NULL;
-   lista->fim = NULL;
-   lista->tamanho = 0;
+int inicializarLista(ListaPtr l){
+   l->inicio = NULL;
+   l->fim = NULL;
+   l->tamanho = 0;
    return 1;
 }
 
-int listaVazia(ListaEncadeada *lista){
-    return (lista->inicio == NULL)?1:0;
+int listaVazia(ListaPtr l){
+    return (l->inicio == NULL)?1:0;
 }
 
-int inserirNoInicio(ListaEncadeada *lista, int matricula, char nome[MAX_CARACTERES]){
-    No *novo = malloc(sizeof(No));
-    if (novo == NULL) {
-        printf("ERRO: MEMÓRIA\n");
+int inserirNoInicio(ListaPtr l, int matricula, const char *nome){
+    No *no_busca = buscarElemento(l, matricula);
+    if(no_busca != NULL){
+        printf("ERRO ALUNO_DUPLICADO\n");
         return 0;
     }
 
-    No *no_busca = buscarElemento(lista, matricula);
-
-    if(no_busca != NULL){
-        printf("ERRO: ALUNO DUPLICADO\n");
+    No *novo = malloc(sizeof(No));
+    if (novo == NULL) {
+        printf("ERRO MEMÓRIA\n");
         return 0;
     }
 
     novo->estudante = criarEstudante(matricula, nome);
 
-    // Se a lista estiver vazia, ao inserir no incio, ambos os ponteiros devem apontar para o Nó
-    if(listaVazia(lista)) lista->fim = novo;
+    // Se a lista estiver vazia, ao inserir no inicio, ambos os ponteiros devem apontar para o Nó
+    if(listaVazia(l)) l->fim = novo;
 
-    novo->prox = lista->inicio;
+    novo->prox = l->inicio;
 
-    lista->inicio = novo;
+    l->inicio = novo;
     return 1;
 }
 
-int inserirNoFinal(ListaEncadeada *lista, int matricula, char nome[MAX_CARACTERES]){
-    No *novo = malloc(sizeof(No));
-    if (novo == NULL) {
-        printf("ERRO: MEMÓRIA\n");
+int inserirNoFinal(ListaPtr l, int matricula, const char *nome){
+    No *no_busca = buscarElemento(l, matricula);
+    if(no_busca != NULL){
+        printf("ERRO ALUNO_DUPLICADO\n");
         return 0;
     }
 
-    No *no_busca = buscarElemento(lista, matricula);
-    if(no_busca != NULL){
-        printf("ERRO: ALUNO DUPLICADO\n");
+    No *novo = malloc(sizeof(No));
+    if (novo == NULL) {
+        printf("ERRO MEMÓRIA\n");
         return 0;
     }
 
     novo->estudante = criarEstudante(matricula, nome);
     novo->prox = NULL;
 
-    if(listaVazia(lista)) {
-        lista->inicio = novo;
-        lista->fim = novo;
+    if(listaVazia(l)) {
+        l->inicio = novo;
+        l->fim = novo;
         return 1;
     }
 
-    lista->fim->prox = novo;
-    lista->fim = novo;
+    l->fim->prox = novo;
+    l->fim = novo;
     return 1;
 }
 
-int imprimirLista(ListaEncadeada *lista){
-    No *aux = lista->inicio;
+int imprimirLista(ListaPtr l){
+    No *aux = l->inicio;
 
-    if(listaVazia(lista)) return 0;
+    if(listaVazia(l)) return 0;
 
     Estudante estudante;
     while(aux != NULL){
@@ -125,11 +124,11 @@ int imprimirLista(ListaEncadeada *lista){
     return 1;
 }
 
-int alterarElemento(ListaEncadeada *lista, int matriculaEstudanteSubstituido, int matricula, char nome[MAX_CARACTERES]){
-    No *no_substiuido = buscarElemento(lista, matriculaEstudanteSubstituido);
+int alterarElemento(ListaPtr l, int matriculaEstudanteSubstituido, int matricula, const char *nome){
+    No *no_substiuido = buscarElemento(l, matriculaEstudanteSubstituido);
 
     if(no_substiuido == NULL) {
-        printf("ERRO: ALUNO_NAO_ENCONTRADO\n");
+        printf("ERRO ALUNO_NAO_ENCONTRADO\n");
         return 0;
     }
 
@@ -137,18 +136,18 @@ int alterarElemento(ListaEncadeada *lista, int matriculaEstudanteSubstituido, in
     return 1;
 }
 
-int deletarUmElemento(ListaEncadeada *lista, int matricula){
-    No *alvo = buscarElemento(lista, matricula);
-    No *aux = lista->inicio;
+int deletarUmElemento(ListaPtr l, int matricula){
+    No *alvo = buscarElemento(l, matricula);
+    No *aux = l->inicio;
 
     if(alvo == NULL) {
-        printf("ERRO: ALUNO_NAO_ENCONTRADO\n");
+        printf("ERRO ALUNO_NAO_ENCONTRADO\n");
         return 0;
     }
 
     // Se alvo está no início da lista, libera corretamente
-    if(lista->inicio == alvo){
-        lista->inicio = alvo->prox;
+    if(l->inicio == alvo){
+        l->inicio = alvo->prox;
         free(alvo);
         alvo = NULL;
         return 1;
@@ -160,56 +159,38 @@ int deletarUmElemento(ListaEncadeada *lista, int matricula){
     }
 
     if(aux == NULL) {
-        printf("ERRO: INTERNO_AO_REMOVER\n");
+        printf("ERRO INTERNO_AO_REMOVER\n");
         return 0;
     }
     aux->prox = alvo->prox;
     free(alvo);
+    if(aux->prox == NULL) l->fim = aux;
+
     return 1;
 }
 
-int deletarTudo(ListaEncadeada *lista){
-    No *aux = lista->inicio;
+int deletarTudo(ListaPtr l){
+    No *aux = l->inicio;
 
-    if (listaVazia(lista)) return 0;
+    if (listaVazia(l)) return 0;
 
     while (aux != NULL) {
-        lista->inicio = aux->prox;
+        l->inicio = aux->prox;
         free(aux);
-        aux = lista->inicio;
+        aux = l->inicio;
     }
+
+    free(aux);
 
     return 1;
 }
 
-int inserirOrdenado(ListaEncadeada *lista, int matricula, char nome[MAX_CARACTERES]){
-    No *novo = malloc(sizeof(No));
-    if (novo == NULL) {
-        printf("ERRO: MEMÓRIA\n");
-        return 0;
-    }
-    novo->estudante = criarEstudante(matricula, nome);
-    novo->prox = NULL;
-
-    // caso lista vazia ou entra antes do primeiro
-    if (lista->inicio == NULL || matricula < lista->inicio->estudante.matricula) {
-        novo->prox = lista->inicio;
-        lista->inicio = novo;
-        return 1;
-    }
-    // acha posição: aux para no nó anterior ao ponto de inserção
-    No *aux = lista->inicio;
-    while (aux->prox != NULL && aux->prox->estudante.matricula <= matricula) {
-        aux = aux->prox;
-    }
-    novo->prox = aux->prox;
-    aux->prox = novo;
-    return 1;
-}
-
-int finalizarLista(ListaEncadeada *lista){
-    deletarTudo(lista);
-    lista->inicio = NULL;
-    lista = NULL;
+int finalizarLista(ListaPtr l){
+    deletarTudo(l);
+    l->inicio = NULL;
+    l->fim = NULL;
+    l->tamanho = 0;
+    free(l);
+    l = NULL;
     return 1;
 }

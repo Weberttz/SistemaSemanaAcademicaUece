@@ -1,7 +1,7 @@
 #ifndef LISTA_H
 #define LISTA_H
 
-#define MAX_CARACTERES 60
+#define MAX_CARACTERES 100
 
 #include <stddef.h>
 
@@ -9,24 +9,21 @@
 typedef struct Estudante Estudante;
 
 // Declara variáveis para garantir que as operações possam ser concluídas com essas variáveis
-typedef struct ListaEncadeada ListaEncadeada;
-typedef struct No No;
+typedef struct ListaInscritos* ListaPtr; // opaco
 
 // Função que incializa uma nova lista encadeada
-ListaEncadeada *criarLista(void);
+ListaPtr criarLista(void);
 
-
-Estudante criarEstudante(int matricula, char nome[MAX_CARACTERES]);
-int inicializarLista(ListaEncadeada *lista);
-int listaVazia(ListaEncadeada *lista);
-int inserirNoFinal(ListaEncadeada *lista, int matricula, char nome[MAX_CARACTERES]);
-int imprimirLista(ListaEncadeada *lista);
-int deletarUmElemento(ListaEncadeada *lista, int matricula);
-int deletarTudo(ListaEncadeada *lista);
-int finalizarLista(ListaEncadeada *lista);
+Estudante criarEstudante(int matricula, const char *nome);
+int inicializarLista(ListaPtr l);
+int listaVazia(ListaPtr l);
+int inserirNoFinal(ListaPtr l, int matricula, const char *nome);
+int imprimirLista(ListaPtr l);
+int deletarTudo(ListaPtr l);
+int finalizarLista(ListaPtr l);
 
 // Talvez precise
-int inserirNoInicio(ListaEncadeada *lista, int matricula, char nome[MAX_CARACTERES]);
-int inserirOrdenado(ListaEncadeada *lista, int matricula, char nome[MAX_CARACTERES]);
-int alterarElemento(ListaEncadeada *lista, int matriculaEstudanteSubstituido, int matricula, char nome[MAX_CARACTERES]);
+int inserirNoInicio(ListaPtr l, int matricula, const char *nome);
+//int inserirOrdenado(ListaPtr l, int matricula, const char *nome);
+int alterarElemento(ListaPtr l, int matriculaEstudanteSubstituido, int matricula, const char *nome);
 #endif
