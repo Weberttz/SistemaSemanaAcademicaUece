@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX_CARACTERES 100
+
 typedef struct Estudante{
     int matricula;
     char nome[100];

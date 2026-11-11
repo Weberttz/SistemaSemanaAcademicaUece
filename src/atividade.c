@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MAX_CARACTERES 100
+
 typedef struct Atividade{
     int codigo;
     char titulo[MAX_CARACTERES];
