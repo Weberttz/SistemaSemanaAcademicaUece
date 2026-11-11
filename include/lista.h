@@ -1,8 +1,6 @@
 #ifndef LISTA_H
 #define LISTA_H
 
-#define MAX_CARACTERES 100
-
 #include <stddef.h>
 
 // Para o compilador saber os dados do estudante

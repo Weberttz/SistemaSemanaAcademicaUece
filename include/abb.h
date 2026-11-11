@@ -1,6 +1,5 @@
 #ifndef ABB_H
 #define ABB_H
-#define MAX_CARACTERES 100
 #include <stdbool.h>
 
 #include "atividade.h"
