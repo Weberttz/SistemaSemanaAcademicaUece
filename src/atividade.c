@@ -31,10 +31,20 @@ AtividadePtr criarAtividade(int codigo, int capacidade, const char *nome){
     return atividade;
 }
 
+int inscreverEstudante(AtividadePtr atividade, const int matricula, const char *nome){
+    if(atividade == NULL) return -1;
+    return inserirNoFinal(atividade->lista, matricula, nome);
+}
+
 int getCodigo(AtividadePtr atividade){
     return atividade->codigo;
 }
 
-int inscreverEstudante(AtividadePtr atividade, const int matricula, const char *nome){
-    return inserirNoFinal(atividade->lista, matricula, nome);
+void destruirAtividade(AtividadePtr atividade){
+    if(atividade != NULL){
+        destruirLista(atividade->lista);
+        //destruirFila(atividade->fila);
+        free(atividade);
+        atividade = NULL;
+    }
 }
