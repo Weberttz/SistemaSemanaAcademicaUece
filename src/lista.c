@@ -41,7 +41,7 @@ ListaPtr criarLista(){
     return l;
 }
 
-Estudante criarEstudante(int matricula, const char *nome){
+Estudante criarEstudante(const int matricula, const char *nome){
     Estudante estudante;
     snprintf(estudante.nome, MAX_CARACTERES, "%s", nome);
     estudante.matricula = matricula;
@@ -59,7 +59,7 @@ int listaVazia(ListaPtr l){
     return (l->inicio == NULL)?1:0;
 }
 
-int inserirNoInicio(ListaPtr l, int matricula, const char *nome){
+int inserirNoInicio(ListaPtr l, const int matricula, const char *nome){
     No *no_busca = buscarElemento(l, matricula);
     if(no_busca != NULL){
         printf("ERRO ALUNO_DUPLICADO\n");
@@ -126,7 +126,7 @@ int imprimirLista(ListaPtr l){
     return 1;
 }
 
-int alterarElemento(ListaPtr l, int matriculaEstudanteSubstituido, int matricula, const char *nome){
+int alterarElemento(ListaPtr l,const int matriculaEstudanteSubstituido, const int matricula, const char *nome){
     No *no_substiuido = buscarElemento(l, matriculaEstudanteSubstituido);
 
     if(no_substiuido == NULL) {

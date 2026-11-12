@@ -12,10 +12,10 @@ typedef struct ListaInscritos* ListaPtr; // opaco
 // Função que incializa uma nova lista encadeada
 ListaPtr criarLista(void);
 
-Estudante criarEstudante(int matricula, const char *nome);
+Estudante criarEstudante(const int matricula, const char *nome);
 int inicializarLista(ListaPtr l);
 int listaVazia(ListaPtr l);
-int inserirNoFinal(ListaPtr l, int matricula, const char *nome);
+int inserirNoFinal(ListaPtr l, const int matricula, const char *nome);
 int imprimirLista(ListaPtr l);
 int deletarTudo(ListaPtr l);
 int finalizarLista(ListaPtr l);
@@ -23,5 +23,5 @@ int finalizarLista(ListaPtr l);
 // Talvez precise
 int inserirNoInicio(ListaPtr l, int matricula, const char *nome);
 //int inserirOrdenado(ListaPtr l, int matricula, const char *nome);
-int alterarElemento(ListaPtr l, int matriculaEstudanteSubstituido, int matricula, const char *nome);
+int alterarElemento(ListaPtr l, const int matriculaEstudanteSubstituido, const int matricula, const char *nome);
 #endif
