@@ -31,10 +31,10 @@ AtividadePtr criarAtividade(int codigo, int capacidade, const char *nome){
     return atividade;
 }
 
-int get_codigo(AtividadePtr atividade){
+int getCodigo(AtividadePtr atividade){
     return atividade->codigo;
 }
 
-int inserirEstudanteEmLista(AtividadePtr atividade, int matricula, const char *nome){
-    inserirNoFinal(atividade->lista, matricula, nome);
+int inscreverEstudante(AtividadePtr atividade, const int matricula, const char *nome){
+    return inserirNoFinal(atividade->lista, matricula, nome);
 }
