@@ -15,45 +15,64 @@ typedef struct NoArvore {
     AtividadePtr atividade;
 }NoArvore;
 
-NoArvore *criarNoArvore(int codigo, int capacidade, const char *nome) {
-    NoArvore *novo = malloc(sizeof *novo);
-    if (novo == NULL) {
-        return NULL;
-    }
+AtividadePtr buscarAtividade(const NoArvore *raiz, const int codigo) {
+    if (raiz == NULL) return NULL;
+    int c = getCodigo(raiz->atividade);
+    if (codigo == c) return raiz->atividade;
+    return buscarAtividade(codigo < c ? raiz->esq : raiz->dir, codigo);
+}
 
-    novo->atividade = criarAtividade(codigo, capacidade, nome);
+NoArvore *criarNoArvore(AtividadePtr a) {
+    if (a == NULL) return NULL;
+
+    NoArvore *novo = malloc(sizeof *novo);
+    if (novo == NULL) return NULL;
+
+    novo->atividade = a;
+
     novo->esq = NULL;
     novo->dir = NULL;
     return novo;
 }
 
-NoArvore *inserirEsquerda(NoArvore *pai, int codigo, int capacidade, const char *nome) {
-    if (pai == NULL || pai->esq != NULL) {
-        return NULL;
+NoArvore *inserirEsquerda(NoArvore *pai, AtividadePtr atividade) {
+    if (pai == NULL) {
+        NoArvore *filho = criarNoArvore(atividade);
+        return filho;
     }
-
-    NoArvore *filho = criarNoArvore(codigo, capacidade, nome);
-    if (filho != NULL) {
-        pai->esq = filho;
-    }
-    return filho;
+    
+    pai->esq = inserirEsquerda(pai->esq, atividade);
+    return pai;
 }
 
-NoArvore *inserirDireita(NoArvore *pai, int codigo, int capacidade, const char *nome) {
-    if (pai == NULL || pai->dir != NULL) {
-        return NULL;
+NoArvore *inserirDireita(NoArvore *pai, const AtividadePtr atividade) {
+    if (pai == NULL) {
+        NoArvore *filho = criarNoArvore(atividade);
+        return filho;
     }
-
-    NoArvore *filho = criarNoArvore(codigo, capacidade, nome);
-    if (filho != NULL) {
-        pai->dir = filho;
-    }
-    return filho;
+    
+    pai->dir = inserirDireita(pai->dir, atividade);
+    return pai;
 }
 
-AtividadePtr valorNoArvore(const NoArvore *no) {
+NoArvore *inserirAtividadeNaArvore(NoArvore* raiz, AtividadePtr atividade){
+
+    if (raiz == NULL){
+        return criarNoArvore(atividade);
+    }
+
+    if(valorNoArvore(raiz) < getCodigo(atividade))
+        raiz->dir = inserirAtividadeNaArvore(raiz->dir, atividade);
+    else{
+        raiz->esq = inserirAtividadeNaArvore(raiz->esq, atividade);
+    }
+
+    return raiz;
+}
+
+int valorNoArvore(const NoArvore *no) {
     assert(no != NULL);
-    return no->atividade;
+    return getCodigo(no->atividade);
 }
 
 const NoArvore *filhoEsquerdo(const NoArvore *no) {
@@ -120,7 +139,7 @@ const NoArvore *encontrarPai(const NoArvore *raiz, const NoArvore *alvo) {
 
 void preOrdem(const NoArvore *raiz) {
     if (raiz != NULL) {
-        printf("%d ", get_codigo(raiz->atividade)); /* 1. Raiz */
+        printf("%d ", getCodigo(raiz->atividade)); /* 1. Raiz */
         preOrdem(raiz->esq);        /* 2. Esquerda */
         preOrdem(raiz->dir);        /* 3. Direita */
     }
@@ -129,7 +148,7 @@ void preOrdem(const NoArvore *raiz) {
 void emOrdem(const NoArvore *raiz) {
     if (raiz != NULL) {
         emOrdem(raiz->esq);         /* 1. Esquerda */
-        printf("%d ", get_codigo(raiz->atividade)); /* 2. Raiz */
+        printf("%d ", getCodigo(raiz->atividade)); /* 2. Raiz */
         emOrdem(raiz->dir);         /* 3. Direita */
     }
 }
@@ -138,29 +157,15 @@ void posOrdem(const NoArvore *raiz) {
     if (raiz != NULL) {
         posOrdem(raiz->esq);        /* 1. Esquerda */
         posOrdem(raiz->dir);        /* 2. Direita */
-        printf("%d ", get_codigo(raiz->atividade)); /* 3. Raiz */
+        printf("%d ", getCodigo(raiz->atividade)); /* 3. Raiz */
     }
 }
 
 void liberarArvore(NoArvore *raiz) {
     if (raiz != NULL) {
+        destruirAtividade(raiz->atividade);
         liberarArvore(raiz->esq);
         liberarArvore(raiz->dir);
         free(raiz);
     }
-}
-
-AtividadePtr encontrarAtividade(const NoArvore *raiz, int codigo) {
-    if (raiz == NULL) return NULL;
-    int c = get_codigo(raiz->atividade);
-    if (codigo == c) return raiz->atividade;
-    return encontrarAtividade(codigo < c ? raiz->esq : raiz->dir, codigo);
-}
-
-int inscreverEstudante(NoArvore *raiz, int codigo, int matricula, const char *nome){
-    AtividadePtr a = encontrarAtividade(raiz, codigo);
-
-    if(a == NULL) return 0;
-
-    inserirEstudanteEmLista(a, matricula, nome);
 }

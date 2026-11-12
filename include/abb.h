@@ -16,20 +16,20 @@
 typedef struct NoArvore NoArvore;
 
 /* Cria um no isolado. Ele pode ser usado como raiz de uma arvore. */
-NoArvore *criarNoArvore(int codigo, int capacidade, const char *nome);
+NoArvore *criarNoArvore(AtividadePtr a);
 
 /*
  * Adiciona um NOVO no na posicao indicada e devolve seu endereco.
  * Retorna NULL se pai for NULL, a posicao ja estiver ocupada ou
  * nao houver memoria. Nunca substitui um filho existente.
  */
-NoArvore *inserirEsquerda(NoArvore *pai, int codigo, int capacidade, const char *nome);
-NoArvore *inserirDireita(NoArvore *pai, int codigo, int capacidade, const char *nome);
+NoArvore *inserirEsquerda(NoArvore *pai, AtividadePtr atividade);
+NoArvore *inserirDireita(NoArvore *pai, AtividadePtr atividade);
 
-int inscreverEstudante(NoArvore *raiz, int codigo, int matricula, const char *nome);
+NoArvore *inserirAtividadeNaArvore(NoArvore *raiz, AtividadePtr atividade);
 
 /* Acesso controlado aos dados de um no. valorNoArvore requer no != NULL. */
-AtividadePtr valorNoArvore(const NoArvore *no);
+int valorNoArvore(const NoArvore *no);
 const NoArvore *filhoEsquerdo(const NoArvore *no);
 const NoArvore *filhoDireito(const NoArvore *no);
 bool ehFolha(const NoArvore *no);
@@ -48,6 +48,7 @@ int nivel(const NoArvore *raiz, const NoArvore *alvo);
 
 /* Encontra o pai de alvo; NULL para a raiz ou para no inexistente. */
 const NoArvore *encontrarPai(const NoArvore *raiz, const NoArvore *alvo);
+AtividadePtr buscarAtividade(const NoArvore *raiz, const int codigo);
 
 /* Percursos recursivos: imprimem valores separados por espacos. */
 void preOrdem(const NoArvore *raiz); /* Raiz, Esquerda, Direita */
