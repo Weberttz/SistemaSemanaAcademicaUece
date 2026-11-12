@@ -138,7 +138,7 @@ int alterarElemento(ListaPtr l,const int matriculaEstudanteSubstituido, const in
     return 1;
 }
 
-int deletarUmElemento(ListaPtr l, int matricula){
+int deletarUmElemento(ListaPtr l, const int matricula){
     No *alvo = buscarElemento(l, matricula);
     No *aux = l->inicio;
 
@@ -187,12 +187,11 @@ int deletarTudo(ListaPtr l){
     return 1;
 }
 
-int finalizarLista(ListaPtr l){
+void destruirLista(ListaPtr l){
     deletarTudo(l);
     l->inicio = NULL;
     l->fim = NULL;
     l->tamanho = 0;
     free(l);
     l = NULL;
-    return 1;
 }
