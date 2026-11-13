@@ -32,9 +32,9 @@ int main(){
         if(strcmp(comando, "CRIAR") == 0){
             int codigo, capacidade;
             char nome[MAX_CARACTERES];
-            scanf("%d", &codigo);
-            scanf("%d", &capacidade);
-            scanf("%s", nome);
+            if(scanf("%d", &codigo) == 0) return 0;
+            if(scanf("%d", &capacidade) == 0) return 0;
+            if(scanf("%s", nome) == 0) return 0;
             // criar atividade, utilizando encapsulamento
             AtividadePtr atividade = buscarAtividade(raiz, codigo);
             if(atividade != NULL) {
@@ -46,9 +46,9 @@ int main(){
         }
         else  if (strcmp(comando, "INSCREVER") == 0) {
             int matricula, codigo; char nome[MAX_CARACTERES];
-            scanf("%d", &codigo);
-            scanf("%d", &matricula);
-            scanf("%s", nome);
+            if(scanf("%d", &codigo) == 0) return 0;
+            if(scanf("%d", &matricula) == 0) return 0;
+            if(scanf("%s", nome) == 0) return 0;
             
             AtividadePtr a = buscarAtividade(raiz, codigo);
             int resultado = inscreverEstudante(a, matricula, nome);
@@ -66,8 +66,8 @@ int main(){
         }
         else if(strcmp(comando, "AUMENTAR") == 0){
             int codigo, incremento;
-            scanf("%d", &codigo);
-            scanf("%d", &incremento);
+            if(scanf("%d", &codigo) == 0) return 0;
+            if(scanf("%d", &incremento) == 0) return 0;
 
             AtividadePtr a = buscarAtividade(raiz, codigo);
             int resultado = aumentarCapacidade(a, incremento);
