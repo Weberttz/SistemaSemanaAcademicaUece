@@ -36,7 +36,7 @@ void imprimirDados(AtividadePtr atividade){
         printf("ERRO ATIVIDADE_INECISTENTE");
         return;
     }
-    printf("ATIVIDADE %d %s %d %d %d", 
+    printf("ATIVIDADE %d %s %d %d %d\n", 
     atividade->codigo,atividade->titulo, atividade->capacidade, 
     atividade->qntInscritos, atividade->qntEspera);
 }
@@ -52,8 +52,10 @@ int inscreverEstudante(AtividadePtr atividade, const int matricula, const char *
     return resultado;
 }
 
-int getCodigo(AtividadePtr atividade){
-    return atividade->codigo;
+int aumentarCapacidade(AtividadePtr atividade, const int incremento){
+    if (atividade == NULL) return 0;
+    atividade->capacidade += incremento;
+    return 1;
 }
 
 void destruirAtividade(AtividadePtr atividade){
@@ -63,4 +65,12 @@ void destruirAtividade(AtividadePtr atividade){
         free(atividade);
         atividade = NULL;
     }
+}
+
+int getCodigo(AtividadePtr atividade){
+    return atividade->codigo;
+}
+
+int getCapacidade(AtividadePtr atividade){
+    return atividade->capacidade;
 }
