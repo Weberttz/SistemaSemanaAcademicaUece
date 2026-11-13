@@ -36,6 +36,11 @@ int main(){
             scanf("%d", &capacidade);
             scanf("%s", nome);
             // criar atividade, utilizando encapsulamento
+            AtividadePtr atividade = buscarAtividade(raiz, codigo);
+            if(atividade != NULL) {
+                printf("ERRO ATIVIDADE_EXISTE");
+                return 0;
+            }
             AtividadePtr a = criarAtividade(codigo, capacidade, nome);
             raiz = inserirAtividadeNaArvore(raiz, a);
         }
@@ -46,9 +51,15 @@ int main(){
             scanf("%s", nome);
             
             AtividadePtr a = buscarAtividade(raiz, codigo);
-            int result = inscreverEstudante(a, matricula, nome);
+            int resultado = inscreverEstudante(a, matricula, nome);
 
-            printf("%d\n", result);
+            if(resultado) printf("OK INSCRITO %d %s\n", matricula, nome);
+        }
+        else if (strcmp(comando, "BUSCAR") == 0){
+            int codigo;
+            if(scanf("%d", &codigo) == 0) return 0;
+            AtividadePtr atividade = buscarAtividade(raiz, codigo);
+            imprimirDados(atividade);      
         }
         else if (strcmp(comando, "IMPRIMIR") == 0) {
             preOrdem(raiz);
@@ -59,9 +70,6 @@ int main(){
             scanf("%d", &nova_capacidade);
 
             AtividadePtr a = buscarAtividade(raiz, codigo);
-            
-
-            // printf("Comando invalido: %s\n", comando);
         }
         else if (strcmp(comando, "FIM") == 0) {
             rodando = 0;
