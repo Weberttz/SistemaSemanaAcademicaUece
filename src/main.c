@@ -65,11 +65,14 @@ int main(){
             preOrdem(raiz);
         }
         else if(strcmp(comando, "AUMENTAR") == 0){
-            int codigo, nova_capacidade;
+            int codigo, incremento;
             scanf("%d", &codigo);
-            scanf("%d", &nova_capacidade);
+            scanf("%d", &incremento);
 
             AtividadePtr a = buscarAtividade(raiz, codigo);
+            int resultado = aumentarCapacidade(a, incremento);
+
+            if(resultado) printf("OK AUMENTAR %d %d %d\n", codigo, getCapacidade(a) ,incremento);
         }
         else if (strcmp(comando, "FIM") == 0) {
             rodando = 0;
