@@ -31,9 +31,25 @@ AtividadePtr criarAtividade(int codigo, int capacidade, const char *nome){
     return atividade;
 }
 
+void imprimirDados(AtividadePtr atividade){
+    if (atividade == NULL) {
+        printf("ERRO ATIVIDADE_INECISTENTE");
+        return;
+    }
+    printf("ATIVIDADE %d %s %d %d %d", 
+    atividade->codigo,atividade->titulo, atividade->capacidade, 
+    atividade->qntInscritos, atividade->qntEspera);
+}
+
 int inscreverEstudante(AtividadePtr atividade, const int matricula, const char *nome){
     if(atividade == NULL) return -1;
-    return inserirNoFinal(atividade->lista, matricula, nome);
+
+    // Chamar inscrição em fila
+    if(atividade->qntInscritos >= atividade->capacidade) return 0;
+
+    int resultado =  inserirNoFinal(atividade->lista, matricula, nome);
+    if(resultado) atividade->qntInscritos++;
+    return resultado;
 }
 
 int getCodigo(AtividadePtr atividade){
