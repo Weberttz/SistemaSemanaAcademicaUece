@@ -68,6 +68,42 @@ int registrarEvento(HistoricoPtr historico,
     return 1;
 }
 
-void imprimirHistorico(const HistoricoPtr historico) {
 
+void imprimirHistorico(const HistoricoPtr historico) {
+    if (historico == NULL) {
+        return;
+    }
+
+    printf("HISTORICO %d\n", historico->quantidade);
+
+    Evento *atual = historico->inicio;
+
+    while (atual != NULL) {
+        printf("EVENTO %d %s %d %d\n",
+               atual->sequencia,
+               atual->tipo,
+               atual->codigoAtividade,
+               atual->matricula);
+
+        atual = atual->prox;
+    }
+}
+
+
+void destruirHistorico(HistoricoPtr historico) {
+    if (historico == NULL) {
+        return;
+    }
+
+    Evento *atual = historico->inicio;
+
+    while (atual != NULL) {
+        Evento *proximo = atual->prox;
+
+        free(atual);
+
+        atual = proximo;
+    }
+
+    free(historico);
 }
