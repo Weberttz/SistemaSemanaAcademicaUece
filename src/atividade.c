@@ -34,6 +34,16 @@ AtividadePtr criarAtividade(int codigo, int capacidade, const char *nome){
     return atividade;
 }
 
+EstudantePtr buscarEstudanteEmAtividade(AtividadePtr atividade, const int matricula){
+    EstudantePtr estudanteLista = buscarEstudanteEmLista(atividade->lista, matricula);
+    EstudantePtr estudanteFila = buscarEstudanteEmFila(atividade->fila, matricula);
+    
+    if(estudanteLista != NULL) return estudanteLista;
+    if(estudanteFila != NULL) return estudanteFila;
+
+    return NULL;
+}
+
 void imprimirDados(AtividadePtr atividade){
     printf("ATIVIDADE %d %s %d %d %d\n", 
     atividade->codigo,atividade->titulo, atividade->capacidade, 

@@ -6,6 +6,7 @@
 typedef struct Atividade *AtividadePtr;
 
 AtividadePtr criarAtividade(int codigo, int capacidade, const char *nome);
+EstudantePtr buscarEstudanteEmAtividade(AtividadePtr atividade, const int matricula);
 void imprimirDados(AtividadePtr atividade);
 int inscreverEstudante(AtividadePtr atividade, EstudantePtr estudante);
 void destruirAtividade(AtividadePtr atividade);
