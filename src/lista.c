@@ -122,8 +122,7 @@ int imprimirLista(ListaPtr l){
     EstudantePtr estudante;
     while(aux != NULL){
         estudante = aux->estudante;
-        printf("Matrícula: %d\n", estudante->matricula);
-        printf("Nome: %s\n", estudante->nome);
+        printf("%d ", estudante->matricula);
         aux = aux->prox;
     }
 
