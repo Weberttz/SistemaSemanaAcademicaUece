@@ -1,15 +1,16 @@
 #ifndef FILA_H
 #define FILA_H
 
-typedef struct Estudante Estudante;
+typedef struct Estudante *EstudantePtr;
 typedef struct No No;
-typedef struct Fila Fila;
+typedef struct Fila *FilaPtr;
 
-void inicializarFila(Fila *f);
-Estudante *inserirFila(Fila *f, Estudante *estudante);
-int removerFila(Fila *f, Estudante *removido);
-Estudante *consultarPrimeiro(Fila *f);
-int isVazia(Fila *f);
-
+FilaPtr criarFila(void);
+void inicializarFila(FilaPtr f);
+int inserirFila(FilaPtr f, EstudantePtr estudante);
+int removerFila(FilaPtr f, EstudantePtr removido);
+EstudantePtr consultarPrimeiro(FilaPtr f);
+int isVazia(FilaPtr f);
+int destruirFila(FilaPtr f);
 
 #endif

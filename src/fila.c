@@ -2,32 +2,40 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct {
-    Estudante *Estudante;
-    No *prox;
-}No;
-
-typedef struct {
-    No *inicio;
-    No *fim;
-}Fila; 
-
-typedef struct{
+typedef struct Estudante{
     int matricula;
     char nome[100];
 }Estudante;
 
-void inicializarFila(Fila *fila){
-    fila->inicio = NULL;
-    fila->fim = NULL;
+typedef struct No{
+    EstudantePtr estudante;
+    No *prox;
+}No;
+
+typedef struct Fila{
+    No *inicio;
+    No *fim;
+}Fila; 
+
+FilaPtr criarFila(void){
+    FilaPtr f = malloc(sizeof(Fila));
+    if (f != NULL) {
+       inicializarFila(f);
+    }
+    return f;
 }
-int isVazia(Fila *f){
+
+void inicializarFila(FilaPtr f){
+    f->inicio = NULL;
+    f->fim = NULL;
+}
+int isVazia(FilaPtr f){
     return (f->inicio == NULL);
 }
 
-Estudante *inserirFila(Fila *f, Estudante *estudante){
+int inserirFila(FilaPtr f, EstudantePtr estudante){
     No *novoNo = malloc(sizeof(No));
-    novoNo->Estudante = estudante;
+    novoNo->estudante = estudante;
     novoNo->prox = NULL;
     
     if(isVazia(f)){
@@ -37,15 +45,15 @@ Estudante *inserirFila(Fila *f, Estudante *estudante){
         f->fim->prox = novoNo;
         f->fim = novoNo;
     }
-    return estudante;
+    return 1;
 }
-int removerFila(Fila *f, Estudante *removido){
+int removerFila(FilaPtr f, EstudantePtr removido){
     if(isVazia(f)){
         printf("\nFila vazia!");
         return 0;
     }
     No *noRemovido = f->inicio;
-    removido = noRemovido->Estudante;
+    removido = noRemovido->estudante;
     f->inicio = noRemovido->prox;
     if(f->inicio == NULL){
         f->fim = NULL;
@@ -55,6 +63,32 @@ int removerFila(Fila *f, Estudante *removido){
     return 1;
 }
 
-Estudante *consultarPrimeiro(Fila *f){
-    return f->inicio;
+EstudantePtr consultarPrimeiro(FilaPtr f){
+    return f->inicio->estudante;
+}
+
+int deletarTudoFila(FilaPtr f){
+    No *aux = f->inicio;
+
+    if (isVazia(f)) return 0;
+
+    while (aux != NULL) {
+        f->inicio = aux->prox;
+        free(aux->estudante);
+        free(aux);
+        aux = f->inicio;
+    }
+
+    free(aux);
+
+    return 1;
+}
+
+int destruirFila(FilaPtr f){
+    deletarTudoFila(f);
+    f->inicio = NULL;
+    f->fim = NULL;
+    free(f);
+    f = NULL;
+    return 1;
 }
