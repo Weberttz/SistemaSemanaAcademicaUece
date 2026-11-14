@@ -35,10 +35,6 @@ AtividadePtr criarAtividade(int codigo, int capacidade, const char *nome){
 }
 
 void imprimirDados(AtividadePtr atividade){
-    if (atividade == NULL) {
-        printf("ERRO ATIVIDADE_INEXISTENTE");
-        return;
-    }
     printf("ATIVIDADE %d %s %d %d %d\n", 
     atividade->codigo,atividade->titulo, atividade->capacidade, 
     atividade->qntInscritos, atividade->qntEspera);
@@ -85,4 +81,8 @@ int getCapacidade(AtividadePtr atividade){
 
 int getQntEspera(AtividadePtr atividade){
     return atividade->qntEspera;
+}
+
+ListaPtr getLista(AtividadePtr atividade){
+    return atividade->lista;
 }

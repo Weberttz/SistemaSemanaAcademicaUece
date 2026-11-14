@@ -13,5 +13,6 @@ int aumentarCapacidade(AtividadePtr atividade, const int incremento);
 int getCodigo(AtividadePtr atividade);
 int getCapacidade(AtividadePtr atividade);
 int getQntEspera(AtividadePtr atividade);
+ListaPtr getLista(AtividadePtr atividade);
 
 #endif
