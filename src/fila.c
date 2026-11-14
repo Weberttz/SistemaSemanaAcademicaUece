@@ -25,6 +25,18 @@ FilaPtr criarFila(void){
     return f;
 }
 
+EstudantePtr buscarEstudanteEmFila(FilaPtr fila, const int matricula){
+    No *aux = fila->inicio;
+    
+    while(aux != NULL){
+        if (aux->estudante->matricula == matricula)
+            return aux->estudante;
+        aux = aux->prox;
+    }
+
+    return NULL;
+}
+
 void inicializarFila(FilaPtr f){
     f->inicio = NULL;
     f->fim = NULL;

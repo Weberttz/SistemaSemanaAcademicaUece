@@ -6,6 +6,7 @@ typedef struct No No;
 typedef struct Fila *FilaPtr;
 
 FilaPtr criarFila(void);
+EstudantePtr buscarEstudanteEmFila(FilaPtr fila, const int matricula);
 void inicializarFila(FilaPtr f);
 int inserirFila(FilaPtr f, EstudantePtr estudante);
 int removerFila(FilaPtr f, EstudantePtr removido);
