@@ -22,6 +22,8 @@ int deletarUmElemento(ListaPtr l, const int matricula);
 int deletarTudoLista(ListaPtr l);
 void destruirLista(ListaPtr *l);
 
+EstudantePtr buscarEstudanteEmLista(ListaPtr l, const int matricula);
+
 // Talvez precise
 //int inserirOrdenado(ListaPtr l, int matricula, const char *nome);
 int alterarElemento(ListaPtr l, const int matriculaEstudanteSubstituido, EstudantePtr estudante);

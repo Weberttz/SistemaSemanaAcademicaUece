@@ -33,6 +33,18 @@ static No *buscarElemento(ListaPtr l, int matricula){
     return NULL;
 }
 
+EstudantePtr buscarEstudanteEmLista(ListaPtr l, int matricula){
+    No *aux = l->inicio;
+    
+    while(aux != NULL){
+        if (aux->estudante->matricula == matricula)
+            return aux->estudante;
+        aux = aux->prox;
+    }
+
+    return NULL;
+}
+
 ListaPtr criarLista(){
     ListaPtr l = malloc(sizeof(ListaInscritos));
     if (l != NULL) {
