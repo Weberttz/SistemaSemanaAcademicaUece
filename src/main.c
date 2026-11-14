@@ -42,6 +42,8 @@ EstadoComando executarCriar(NoArvore **raiz) {
 
     *raiz = inserirAtividadeNaArvore(*raiz, atividade);
 
+    printf("OK CRIAR %d\n", codigo);
+
     return CONTINUAR;
 }
 
@@ -64,6 +66,13 @@ EstadoComando executarInscrever(NoArvore *raiz) {
 
     if (atividade == NULL) {
         printf("ERRO ATIVIDADE_INEXISTENTE");
+        return ENCERRAR;
+    }
+
+    EstudantePtr e = buscarEstudanteEmAtividade(atividade, matricula);
+
+    if(e != NULL){
+        printf("ERRO ESTUDANTE_DUPLICADO");
         return ENCERRAR;
     }
 
