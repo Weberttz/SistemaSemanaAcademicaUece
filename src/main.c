@@ -42,6 +42,7 @@ int main(){
                 return 0;
             }
             AtividadePtr a = criarAtividade(codigo, capacidade, nome);
+            if( a == NULL) return 0;
             raiz = inserirAtividadeNaArvore(raiz, a);
         }
         else  if (strcmp(comando, "INSCREVER") == 0) {
@@ -51,9 +52,11 @@ int main(){
             if(scanf("%s", nome) == 0) return 0;
             
             AtividadePtr a = buscarAtividade(raiz, codigo);
-            int resultado = inscreverEstudante(a, matricula, nome);
+            EstudantePtr e = criarEstudante(matricula, nome);
+            int resultado = inscreverEstudante(a, e);
 
-            if(resultado) printf("OK INSCRITO %d %s\n", matricula, nome);
+            if(resultado == 1) printf("OK INSCRITO %d %s\n", matricula, nome);
+            else if(resultado == 2) printf("OK ESPERA %d %s %d\n", matricula, nome, getQntEspera(a)-1);
         }
         else if (strcmp(comando, "BUSCAR") == 0){
             int codigo;
