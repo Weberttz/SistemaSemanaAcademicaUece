@@ -1,5 +1,5 @@
-#include "../include/lista.h"
 #include "../include/atividade.h"
+#include "../include/fila.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -11,7 +11,9 @@ typedef struct Atividade{
     int capacidade;
     int qntInscritos;
     int qntEspera;
-    ListaPtr lista; // tipo opaco
+    // tipos opacos
+    ListaPtr lista; 
+    FilaPtr fila;
 }Atividade;
 
 AtividadePtr criarAtividade(int codigo, int capacidade, const char *nome){
@@ -27,13 +29,14 @@ AtividadePtr criarAtividade(int codigo, int capacidade, const char *nome){
     atividade->qntInscritos = 0;
     snprintf(atividade->titulo, MAX_CARACTERES, "%s", nome); 
     atividade->lista = criarLista();
+    atividade->fila = criarFila();
 
     return atividade;
 }
 
 void imprimirDados(AtividadePtr atividade){
     if (atividade == NULL) {
-        printf("ERRO ATIVIDADE_INECISTENTE");
+        printf("ERRO ATIVIDADE_INEXISTENTE");
         return;
     }
     printf("ATIVIDADE %d %s %d %d %d\n", 
@@ -41,13 +44,18 @@ void imprimirDados(AtividadePtr atividade){
     atividade->qntInscritos, atividade->qntEspera);
 }
 
-int inscreverEstudante(AtividadePtr atividade, const int matricula, const char *nome){
+int inscreverEstudante(AtividadePtr atividade, EstudantePtr estudante){
     if(atividade == NULL) return -1;
 
     // Chamar inscrição em fila
-    if(atividade->qntInscritos >= atividade->capacidade) return 0;
+    if(atividade->qntInscritos >= atividade->capacidade){
+        int resultado = inserirFila(atividade->fila, estudante);
+        if(resultado == 1) atividade->qntEspera+=resultado;
+        else return 0;
+        return 2;
+    }
 
-    int resultado =  inserirNoFinal(atividade->lista, matricula, nome);
+    int resultado = inserirNoFinal(atividade->lista, estudante);
     if(resultado) atividade->qntInscritos++;
     return resultado;
 }
@@ -60,8 +68,8 @@ int aumentarCapacidade(AtividadePtr atividade, const int incremento){
 
 void destruirAtividade(AtividadePtr atividade){
     if(atividade != NULL){
-        destruirLista(atividade->lista);
-        //destruirFila(atividade->fila);
+        destruirLista(&atividade->lista);
+        destruirFila(atividade->fila);
         free(atividade);
         atividade = NULL;
     }
@@ -73,4 +81,8 @@ int getCodigo(AtividadePtr atividade){
 
 int getCapacidade(AtividadePtr atividade){
     return atividade->capacidade;
+}
+
+int getQntEspera(AtividadePtr atividade){
+    return atividade->qntEspera;
 }
