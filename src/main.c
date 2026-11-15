@@ -252,8 +252,9 @@ EstadoComando executarComando(const char *comando, NoArvore **raiz) {
     if (strcmp(comando, "ESPERA") == 0)
         return executarEspera(*raiz);
 
-    if (strcmp(comando, "IMPRIMIR") == 0) {
-        preOrdem(*raiz);
+    if (strcmp(comando, "LISTAR") == 0) {
+        printf("LISTAR %d\n", getQntAtividade(*raiz));
+        int resultado = listarAtividades(*raiz);
         return CONTINUAR;
     }
 
