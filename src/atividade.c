@@ -44,6 +44,37 @@ EstudantePtr buscarEstudanteEmAtividade(AtividadePtr atividade, const int matric
     return NULL;
 }
 
+int removerEstudanteAtividade(AtividadePtr atividade, const int matricula){
+    int resultado_lista = removerInscritoLista(atividade->lista, matricula);
+    int resultado_fila = removerEsperaFila(atividade->fila, matricula);
+
+    if(resultado_lista) {
+        atividade->qntInscritos--;
+        return 1;
+    }
+    if(resultado_fila) {
+        atividade->qntEspera--;
+        return 2;
+    }
+
+    return 0;
+}
+
+int promoverFilaEspera(AtividadePtr atividade, EstudantePtr *promovido){
+    EstudantePtr estudante;
+    // Se conseguiu remover da fila
+    if(removerFila(atividade->fila, &estudante)){
+        atividade->qntEspera--;
+        // retorna estudante que foi removido, ele será promovido
+        *promovido = estudante;
+        // Se conseguiu inserir na lista de inscritos
+        if(inserirNoFinal(atividade->lista, estudante))
+            atividade->qntInscritos++;
+            return 1;
+    }
+    return 0;
+}
+
 void imprimirDados(AtividadePtr atividade){
     printf("ATIVIDADE %d %s %d %d %d\n", 
     atividade->codigo,atividade->titulo, atividade->capacidade, 

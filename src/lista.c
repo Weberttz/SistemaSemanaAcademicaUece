@@ -53,14 +53,6 @@ ListaPtr criarLista(){
     return l;
 }
 
-EstudantePtr criarEstudante(const int matricula, const char *nome){
-    EstudantePtr estudante = malloc(sizeof(Estudante));
-    if(estudante == NULL) return NULL;
-    snprintf(estudante->nome, MAX_CARACTERES, "%s", nome);
-    estudante->matricula = matricula;
-    return estudante;
-}
-
 int inicializarLista(ListaPtr l){
    l->inicio = NULL;
    l->fim = NULL;
@@ -153,12 +145,11 @@ int alterarElemento(ListaPtr l,const int matriculaEstudanteSubstituido, Estudant
     return 1;
 }
 
-int deletarUmElemento(ListaPtr l, const int matricula){
+int removerInscritoLista(ListaPtr l, const int matricula){
     No *alvo = buscarElemento(l, matricula);
     No *aux = l->inicio;
 
     if(alvo == NULL) {
-        printf("ERRO ALUNO_NAO_ENCONTRADO\n");
         return 0;
     }
 

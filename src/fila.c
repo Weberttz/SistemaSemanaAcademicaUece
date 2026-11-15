@@ -17,6 +17,18 @@ typedef struct Fila{
     No *fim;
 }Fila; 
 
+static No *buscarElementoEmFila(FilaPtr l, int matricula){
+    No *aux = l->inicio;
+    
+    while(aux != NULL){
+        if (aux->estudante->matricula == matricula)
+            return aux;
+        aux = aux->prox;
+    }
+
+    return NULL;
+}
+
 FilaPtr criarFila(void){
     FilaPtr f = malloc(sizeof(Fila));
     if (f != NULL) {
@@ -59,19 +71,53 @@ int inserirFila(FilaPtr f, EstudantePtr estudante){
     }
     return 1;
 }
-int removerFila(FilaPtr f, EstudantePtr removido){
+int removerFila(FilaPtr f, EstudantePtr *removido){
     if(isVazia(f)){
         printf("\nFila vazia!");
         return 0;
     }
     No *noRemovido = f->inicio;
-    removido = noRemovido->estudante;
+    *removido = noRemovido->estudante;
     f->inicio = noRemovido->prox;
     if(f->inicio == NULL){
         f->fim = NULL;
     }
 
     free(noRemovido);
+    return 1;
+}
+
+int removerEsperaFila(FilaPtr f, const int matricula){
+    No *alvo = buscarElementoEmFila(f, matricula);
+    No *aux = f->inicio;
+
+    if(alvo == NULL) {
+        return 0;
+    }
+
+    // Se alvo está no início da lista, libera corretamente
+    if(f->inicio == alvo){
+        f->inicio = alvo->prox;
+        free(alvo->estudante);
+        free(alvo);
+        alvo = NULL;
+        return 1;
+    }
+
+    // Se alvo está na cauda da lista
+    while(aux != NULL && aux->prox !=alvo){
+        aux = aux->prox;
+    }
+
+    if(aux == NULL) {
+        printf("ERRO INTERNO_AO_REMOVER\n");
+        return 0;
+    }
+    aux->prox = alvo->prox;
+    free(alvo->estudante);
+    free(alvo);
+    if(aux->prox == NULL) f->fim = aux;
+
     return 1;
 }
 
