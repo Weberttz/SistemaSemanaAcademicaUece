@@ -124,6 +124,10 @@ int getQntEspera(AtividadePtr atividade){
     return atividade->qntEspera;
 }
 
+char *getTitulo(AtividadePtr atividade){
+    return atividade->titulo;
+}
+
 ListaPtr getLista(AtividadePtr atividade){
     return atividade->lista;
 }

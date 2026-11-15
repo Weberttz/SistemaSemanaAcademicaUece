@@ -17,6 +17,7 @@ int aumentarCapacidade(AtividadePtr atividade, const int incremento);
 int getCodigo(AtividadePtr atividade);
 int getCapacidade(AtividadePtr atividade);
 int getQntEspera(AtividadePtr atividade);
+char *getTitulo(AtividadePtr atividade);
 ListaPtr getLista(AtividadePtr atividade);
 FilaPtr getFila(AtividadePtr atividade);
 
