@@ -168,6 +168,33 @@ EstadoComando executarInscritos(NoArvore *raiz) {
     if (!resultado)
         printf("%d", resultado);
 
+    printf("\n");
+
+    return CONTINUAR;
+}
+
+EstadoComando executarEspera(NoArvore *raiz){
+    int codigo;
+    if (scanf("%d", &codigo) != 1 || codigo <= 0) {
+        imprimirErroParametros();
+        return ENCERRAR;
+    }
+
+    AtividadePtr atividade = buscarAtividade(raiz, codigo);
+
+    if (atividade == NULL) {
+        printf("ERRO ATIVIDADE_INEXISTENTE");
+        return ENCERRAR;
+    }
+
+    printf("ESPERA %d ", codigo);
+    int resultado = imprimirFila(getFila(atividade));
+
+    if (!resultado)
+        printf("%d", resultado);
+
+    printf("\n");
+     
     return CONTINUAR;
 }
 
@@ -222,13 +249,18 @@ EstadoComando executarComando(const char *comando, NoArvore **raiz) {
     if (strcmp(comando, "INSCRITOS") == 0)
         return executarInscritos(*raiz);
 
+    if (strcmp(comando, "ESPERA") == 0)
+        return executarEspera(*raiz);
+
     if (strcmp(comando, "IMPRIMIR") == 0) {
         preOrdem(*raiz);
         return CONTINUAR;
     }
 
-    if (strcmp(comando, "FIM") == 0)
+    if (strcmp(comando, "FIM") == 0){
+        printf("FIM\n");
         return ENCERRAR;
+    }
 
     imprimirErroParametros();
     return ENCERRAR;
