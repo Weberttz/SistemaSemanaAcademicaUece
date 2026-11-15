@@ -1,6 +1,7 @@
 #include "../include/abb.h"
 #include <stdio.h>
 #include <string.h>
+#include "../include/historico.h"
 
 #define MAX_CARACTERES 100
 
@@ -15,6 +16,12 @@ int main(){
     int rodando = 1;
 
     NoArvore *raiz = NULL;
+
+    HistoricoPtr historico = criarHistorico();
+
+    if (historico == NULL) {
+        return 1;
+    }
 
     /* int qnt = 3;
     Estrutura estrutura[3] = {
@@ -42,7 +49,17 @@ int main(){
                 return 0;
             }
             AtividadePtr a = criarAtividade(codigo, capacidade, nome);
+
             raiz = inserirAtividadeNaArvore(raiz, a);
+            
+            if (buscarAtividade(raiz, codigo) == a) {
+                registrarEvento(historico, "CADASTRO", codigo, 0);
+                printf("OK CRIAR %d\n", codigo);
+            }
+            else {
+                destruirAtividade(a);
+                fprintf(stderr, "Falha ao inserir na ABB\n");
+            }
         }
         else  if (strcmp(comando, "INSCREVER") == 0) {
             int matricula, codigo; char nome[MAX_CARACTERES];
@@ -53,7 +70,13 @@ int main(){
             AtividadePtr a = buscarAtividade(raiz, codigo);
             int resultado = inscreverEstudante(a, matricula, nome);
 
-            if(resultado) printf("OK INSCRITO %d %s\n", matricula, nome);
+             if (resultado == 1) {
+                registrarEvento(historico, "INSCRICAO", codigo, matricula);
+                printf("OK INSCRITO %d %d\n", codigo, matricula);
+            }
+            else if (resultado == -1) {
+                printf("ERRO ATIVIDADE_INEXISTENTE\n");
+            }
         }
         else if (strcmp(comando, "BUSCAR") == 0){
             int codigo;
@@ -63,6 +86,7 @@ int main(){
         }
         else if (strcmp(comando, "IMPRIMIR") == 0) {
             preOrdem(raiz);
+            printf("\n");
         }
         else if(strcmp(comando, "AUMENTAR") == 0){
             int codigo, nova_capacidade;
@@ -71,12 +95,17 @@ int main(){
 
             AtividadePtr a = buscarAtividade(raiz, codigo);
         }
+        else if(strcmp(comando, "HISTORICO") == 0){
+            imprimirHistorico(historico);
+        }
         else if (strcmp(comando, "FIM") == 0) {
+            printf("FIM\n");
             rodando = 0;
         }
     }
 
     liberarArvore(raiz);
+    destruirHistorico(historico);
 
     return 0;
 }

@@ -32,15 +32,38 @@ HistoricoPtr criarHistorico(void) {
     return historico;
 }
 
+static int validarEvento(const char *tipo,
+                         int codigoAtividade,
+                         int matricula) {
+
+    if (tipo == NULL || codigoAtividade <= 0) {
+        return 0;
+    }
+
+    if (strcmp(tipo, "CADASTRO") == 0 ||
+        strcmp(tipo, "AUMENTO_CAPACIDADE") == 0) {
+        return matricula == 0;
+    }
+
+    if (strcmp(tipo, "INSCRICAO") == 0 ||
+        strcmp(tipo, "ENTRADA_ESPERA") == 0 ||
+        strcmp(tipo, "CANCEL_INSCRICAO") == 0 ||
+        strcmp(tipo, "CANCEL_ESPERA") == 0 ||
+        strcmp(tipo, "PROMOCAO") == 0) {
+        return matricula > 0;
+    }
+
+    return 0;
+}
+
 
 int registrarEvento(HistoricoPtr historico,
                     const char *tipo,
                     int codigoAtividade,
                     int matricula) {
 
-    // falta validar tamanho do *tipo
-    if (historico == NULL || tipo == NULL ||
-        codigoAtividade <= 0 || matricula < 0) {
+    if (historico == NULL ||
+        !validarEvento(tipo, codigoAtividade, matricula)) {
         return 0;
     }
 

@@ -41,14 +41,22 @@ void imprimirDados(AtividadePtr atividade){
     atividade->qntInscritos, atividade->qntEspera);
 }
 
-int inscreverEstudante(AtividadePtr atividade, const int matricula, const char *nome){
-    if(atividade == NULL) return -1;
+int inscreverEstudante(AtividadePtr atividade,
+                      const int matricula,
+                      const char *nome) {
+    if (atividade == NULL) return -1;
 
     // Chamar inscrição em fila
-    if(atividade->qntInscritos >= atividade->capacidade) return 0;
+    if (atividade->qntInscritos >= atividade->capacidade)
+        return 0;
 
-    int resultado =  inserirNoFinal(atividade->lista, matricula, nome);
-    if(resultado) atividade->qntInscritos++;
+    int resultado = inserirNoFinal(
+        atividade->lista, matricula, nome
+    );
+
+    if (resultado)
+        atividade->qntInscritos++;
+
     return resultado;
 }
 
