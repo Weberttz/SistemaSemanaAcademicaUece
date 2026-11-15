@@ -1,4 +1,3 @@
-
 #include "../include/abb.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -101,6 +100,32 @@ EstadoComando executarInscrever(NoArvore *raiz) {
     return CONTINUAR;
 }
 
+EstadoComando executarCancelar(NoArvore *raiz){
+    int codigo, matricula;
+
+    if (scanf("%d %d", &codigo, &matricula) != 2) {
+        imprimirErroParametros();
+        return ENCERRAR;
+    }
+
+    AtividadePtr atividade = buscarAtividade(raiz, codigo);
+
+    if(atividade == NULL){
+        printf("ERRO ATIVIDADE_INEXISTENTE");
+        return ENCERRAR;
+    }
+
+    int resultado_cacelar = removerEstudanteAtividade(atividade, matricula);
+
+    if(resultado_cacelar == 1) {
+        printf("OK CANCELADO_INSCRITO %d %d\n", codigo, matricula);
+        EstudantePtr promovido;
+        int promocao = promoverFilaEspera(atividade, &promovido);
+        if(promocao) printf("PROMOVIDO %d %d\n", codigo, getMatricula(promovido));
+    }
+    else if(resultado_cacelar == 2) printf("OK CANCELADO_ESPERA %d %d\n", codigo, matricula);
+}
+
 /* BUSCAR a */
 EstadoComando executarBuscar(NoArvore *raiz) {
     int codigo;
@@ -184,6 +209,12 @@ EstadoComando executarComando(const char *comando, NoArvore **raiz) {
 
     if (strcmp(comando, "INSCREVER") == 0)
         return executarInscrever(*raiz);
+    
+    if (strcmp(comando, "CANCELAR") == 0)
+        return executarCancelar(*raiz);
+
+    if (strcmp(comando, "AUMENTAR") == 0)
+        return executarAumentar(*raiz);
 
     if (strcmp(comando, "BUSCAR") == 0)
         return executarBuscar(*raiz);
@@ -195,9 +226,6 @@ EstadoComando executarComando(const char *comando, NoArvore **raiz) {
         preOrdem(*raiz);
         return CONTINUAR;
     }
-
-    if (strcmp(comando, "AUMENTAR") == 0)
-        return executarAumentar(*raiz);
 
     if (strcmp(comando, "FIM") == 0)
         return ENCERRAR;
