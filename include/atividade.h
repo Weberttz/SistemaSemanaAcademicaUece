@@ -2,6 +2,7 @@
 #define ATIVIDADE_H
 
 #include "lista.h"
+#include "fila.h"
 
 typedef struct Atividade *AtividadePtr;
 
@@ -17,5 +18,6 @@ int getCodigo(AtividadePtr atividade);
 int getCapacidade(AtividadePtr atividade);
 int getQntEspera(AtividadePtr atividade);
 ListaPtr getLista(AtividadePtr atividade);
+FilaPtr getFila(AtividadePtr atividade);
 
 #endif

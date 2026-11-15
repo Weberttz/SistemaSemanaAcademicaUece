@@ -57,6 +57,21 @@ int isVazia(FilaPtr f){
     return (f->inicio == NULL);
 }
 
+int imprimirFila(FilaPtr f){
+    No *aux = f->inicio;
+
+    if(isVazia(f)) return 0;
+
+    EstudantePtr estudante;
+    while(aux != NULL){
+        estudante = aux->estudante;
+        printf("%d ", estudante->matricula);
+        aux = aux->prox;
+    }
+
+    return 1;
+}
+
 int inserirFila(FilaPtr f, EstudantePtr estudante){
     No *novoNo = malloc(sizeof(No));
     novoNo->estudante = estudante;

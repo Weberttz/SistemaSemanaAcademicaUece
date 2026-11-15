@@ -127,3 +127,7 @@ int getQntEspera(AtividadePtr atividade){
 ListaPtr getLista(AtividadePtr atividade){
     return atividade->lista;
 }
+
+FilaPtr getFila(AtividadePtr atividade){
+    return atividade->fila;
+}
