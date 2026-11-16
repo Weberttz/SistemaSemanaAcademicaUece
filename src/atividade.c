@@ -103,6 +103,17 @@ int aumentarCapacidade(AtividadePtr atividade, const int incremento){
     return 1;
 }
 
+int promoverEstudantes(AtividadePtr atividade, const int incremento){
+    if(!incremento) return 0;
+
+    for(int i=0; i<incremento; i++){
+        EstudantePtr estudante;
+        int resultado = promoverFilaEspera(atividade, &estudante);
+        if(resultado) printf("PROMOVIDO %d %d\n", atividade->codigo ,getMatricula(estudante));
+    }
+    return 1;
+}
+
 void destruirAtividade(AtividadePtr atividade){
     if(atividade != NULL){
         destruirLista(&atividade->lista);
