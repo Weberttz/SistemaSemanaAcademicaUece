@@ -1,15 +1,18 @@
 #ifndef FILA_H
 #define FILA_H
 
-typedef struct Estudante Estudante;
-typedef struct No No;
+#include "estudante.h"
+
 typedef struct Fila Fila;
 
-void inicializarFila(Fila *f);
-Estudante *inserirFila(Fila *f, Estudante *estudante);
-int removerFila(Fila *f, Estudante *removido);
-Estudante *consultarPrimeiro(Fila *f);
-int isVazia(Fila *f);
+Fila *inicializarFila(void);
+void destruirFila(Fila *f);
 
+int isVazia(const Fila *f);
+int tamanhoFila(const Fila *f);
+
+Estudante *inserirFila(Fila *f, Estudante **estudante);
+int removerFila(Fila *f, Estudante **removido);
+Estudante *consultarPrimeiro(const Fila *f);
 
 #endif
