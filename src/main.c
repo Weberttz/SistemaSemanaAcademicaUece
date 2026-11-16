@@ -15,8 +15,14 @@ void imprimirErroParametros(void) {
     printf("ERRO PARAMETROS\n");
 }
 
+
+EstadoComando executarHistorico(HistoricoPtr historicoPtr){
+    imprimirHistorico(historicoPtr);
+    return CONTINUAR;
+}
+
 /* CRIAR a c titulo */
-EstadoComando executarCriar(NoArvore **raiz) {
+EstadoComando executarCriar(NoArvore **raiz, HistoricoPtr historicoPtr) {
     int codigo, capacidade;
     char titulo[MAX_CARACTERES];
 
@@ -42,13 +48,15 @@ EstadoComando executarCriar(NoArvore **raiz) {
 
     *raiz = inserirAtividadeNaArvore(*raiz, atividade);
 
+    registrarEvento(historicoPtr, "CADASTRO", codigo, 0);
+
     printf("OK CRIAR %d\n", codigo);
 
     return CONTINUAR;
 }
 
 /* INSCREVER a m nome */
-EstadoComando executarInscrever(NoArvore *raiz) {
+EstadoComando executarInscrever(NoArvore *raiz, HistoricoPtr historicoPtr) {
     int codigo, matricula;
     char nome[MAX_CARACTERES];
 
@@ -85,10 +93,11 @@ EstadoComando executarInscrever(NoArvore *raiz) {
 
     if (resultado == 1) {
         printf("OK INSCRITO %d %s\n", matricula, nome);
+        registrarEvento(historicoPtr, "INSCRICAO", codigo, matricula);
     }
     else if (resultado == 2) {
-        printf("OK ESPERA %d %s %d\n",
-               matricula, nome, getQntEspera(atividade) - 1);
+        printf("OK ESPERA %d %s %d\n", matricula, nome, getQntEspera(atividade) - 1);
+        registrarEvento(historicoPtr, "ENTRADA_ESPERA", codigo, matricula);
     }
     else {
         /*
@@ -98,10 +107,12 @@ EstadoComando executarInscrever(NoArvore *raiz) {
         free(estudante);
     }
 
+
+
     return CONTINUAR;
 }
 
-EstadoComando executarCancelar(NoArvore *raiz){
+EstadoComando executarCancelar(NoArvore *raiz, HistoricoPtr historicoPtr){
     int codigo, matricula;
 
     if (scanf("%d %d", &codigo, &matricula) != 2) {
@@ -120,11 +131,17 @@ EstadoComando executarCancelar(NoArvore *raiz){
 
     if(resultado_cacelar == 1) {
         printf("OK CANCELADO_INSCRITO %d %d\n", codigo, matricula);
+        registrarEvento(historicoPtr, "CANCEL_INSCRICAO", codigo, matricula);
+        
         EstudantePtr promovido;
         int promocao = promoverFilaEspera(atividade, &promovido);
+
         if(promocao) printf("PROMOVIDO %d %d\n", codigo, getMatricula(promovido));
+        registrarEvento(historicoPtr, "PROMOCAO", codigo, getMatricula(promovido));
     }
     else if(resultado_cacelar == 2) printf("OK CANCELADO_ESPERA %d %d\n", codigo, matricula);
+
+    return CONTINUAR;
 }
 
 /* BUSCAR a */
@@ -200,7 +217,7 @@ EstadoComando executarEspera(NoArvore *raiz){
 }
 
 /* AUMENTAR a d */
-EstadoComando executarAumentar(NoArvore *raiz) {
+EstadoComando executarAumentar(NoArvore *raiz, HistoricoPtr historicoPtr) {
     int codigo, incremento;
 
     if (scanf("%d %d", &codigo, &incremento) != 2) {
@@ -225,24 +242,26 @@ EstadoComando executarAumentar(NoArvore *raiz) {
     if (resultado) {
         printf("OK AUMENTAR %d %d %d\n",
                codigo, getCapacidade(atividade), incremento);
+        registrarEvento(historicoPtr, "AUMENTO_CAPACIDADE", codigo, 0);
     }
 
     return CONTINUAR;
 }
 
 /* Interpretador de comandos */
-EstadoComando executarComando(const char *comando, NoArvore **raiz) {
-    if (strcmp(comando, "CRIAR") == 0)
-        return executarCriar(raiz);
+EstadoComando executarComando(const char *comando, NoArvore **raiz, HistoricoPtr historicoPtr) {
+    if (strcmp(comando, "CRIAR") == 0){
+        return executarCriar(raiz, historicoPtr);
+    }
 
     if (strcmp(comando, "INSCREVER") == 0)
-        return executarInscrever(*raiz);
+        return executarInscrever(*raiz, historicoPtr);
     
     if (strcmp(comando, "CANCELAR") == 0)
-        return executarCancelar(*raiz);
+        return executarCancelar(*raiz, historicoPtr);
 
     if (strcmp(comando, "AUMENTAR") == 0)
-        return executarAumentar(*raiz);
+        return executarAumentar(*raiz, historicoPtr);
 
     if (strcmp(comando, "BUSCAR") == 0)
         return executarBuscar(*raiz);
@@ -253,8 +272,12 @@ EstadoComando executarComando(const char *comando, NoArvore **raiz) {
     if (strcmp(comando, "ESPERA") == 0)
         return executarEspera(*raiz);
 
+    if (strcmp(comando, "HISTORICO") == 0)
+        return executarHistorico(historicoPtr);
+
     if (strcmp(comando, "LISTAR") == 0) {
         printf("LISTAR %d\n", getQntAtividade(*raiz));
+        //tratar esse resultado :
         int resultado = listarAtividades(*raiz);
         return CONTINUAR;
     }
@@ -271,9 +294,10 @@ EstadoComando executarComando(const char *comando, NoArvore **raiz) {
 int main(void) {
     char comando[MAX_CARACTERES];
     NoArvore *raiz = NULL;
+    HistoricoPtr historico = criarHistorico();
 
     while (scanf("%99s", comando) == 1) {
-        EstadoComando estado = executarComando(comando, &raiz);
+        EstadoComando estado = executarComando(comando, &raiz, historico);
 
         if (estado == ENCERRAR)
             break;

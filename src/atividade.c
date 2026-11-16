@@ -68,9 +68,10 @@ int promoverFilaEspera(AtividadePtr atividade, EstudantePtr *promovido){
         // retorna estudante que foi removido, ele será promovido
         *promovido = estudante;
         // Se conseguiu inserir na lista de inscritos
-        if(inserirNoFinal(atividade->lista, estudante))
+        if(inserirNoFinal(atividade->lista, estudante)){
             atividade->qntInscritos++;
             return 1;
+        }
     }
     return 0;
 }
