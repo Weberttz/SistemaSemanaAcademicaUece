@@ -13,6 +13,7 @@ typedef struct NoArvore {
     struct NoArvore *esq;
     struct NoArvore *dir;
     AtividadePtr atividade;
+    int qntAtividade;
 }NoArvore;
 
 AtividadePtr buscarAtividade(const NoArvore *raiz, const int codigo) {
@@ -32,6 +33,7 @@ NoArvore *criarNoArvore(AtividadePtr a) {
 
     novo->esq = NULL;
     novo->dir = NULL;
+    novo->qntAtividade = 1;
     return novo;
 }
 
@@ -56,7 +58,6 @@ NoArvore *inserirDireita(NoArvore *pai, const AtividadePtr atividade) {
 }
 
 NoArvore *inserirAtividadeNaArvore(NoArvore* raiz, AtividadePtr atividade){
-
     if (raiz == NULL){
         return criarNoArvore(atividade);
     }
@@ -66,6 +67,8 @@ NoArvore *inserirAtividadeNaArvore(NoArvore* raiz, AtividadePtr atividade){
     else{
         raiz->esq = inserirAtividadeNaArvore(raiz->esq, atividade);
     }
+
+    raiz->qntAtividade++;
 
     return raiz;
 }
@@ -148,7 +151,9 @@ void preOrdem(const NoArvore *raiz) {
 void emOrdem(const NoArvore *raiz) {
     if (raiz != NULL) {
         emOrdem(raiz->esq);         /* 1. Esquerda */
-        printf("%d ", getCodigo(raiz->atividade)); /* 2. Raiz */
+        printf("ATIVIDADE %d ", getCodigo(raiz->atividade)); /* 2. Raiz */
+        printf("%s ", getTitulo(raiz->atividade));
+        printf("%d\n", getCapacidade(raiz->atividade));
         emOrdem(raiz->dir);         /* 3. Direita */
     }
 }
@@ -159,6 +164,17 @@ void posOrdem(const NoArvore *raiz) {
         posOrdem(raiz->dir);        /* 2. Direita */
         printf("%d ", getCodigo(raiz->atividade)); /* 3. Raiz */
     }
+}
+
+int getQntAtividade(const NoArvore *raiz){
+    if(raiz == NULL) return 0;
+    return raiz->qntAtividade;
+}
+
+int listarAtividades(const NoArvore *raiz){
+    if( raiz == NULL) return 0;
+    emOrdem(raiz);
+    return 1;
 }
 
 void liberarArvore(NoArvore *raiz) {

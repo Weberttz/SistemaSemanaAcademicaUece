@@ -4,94 +4,235 @@
 
 typedef struct No
 {
-    Estudante *Estudante;
+    EstudantePtr estudante;
     struct No *prox;
-    // qnd um struct se auto-referencia ele deve chamar a si mesmo como struct {nome}
 } No;
 
-typedef struct Fila
+struct Fila
 {
     No *inicio;
     No *fim;
     int tamanho;
-};
+} Fila;
 
-Fila *inicializarFila(void)
+// Função auxiliar
+
+static No *buscarElementoEmFila(FilaPtr f, int matricula)
 {
-    Fila *fila = malloc(sizeof(Fila));
-    if (fila == NULL)
-        return NULL;
-    fila->inicio = NULL;
-    fila->fim = NULL;
-    fila->tamanho = 0;
-    return fila;
+    No *aux = f->inicio;
+
+    while (aux != NULL)
+    {
+        if (aux->estudante->matricula == matricula)
+            return aux;
+
+        aux = aux->prox;
+    }
+
+    return NULL;
 }
 
-int isVazia(const Fila *f)
+// Criação e inicialização
+
+FilaPtr criarFila(void)
 {
-    return (f->inicio == NULL);
+    FilaPtr f = malloc(sizeof(struct Fila));
+
+    if (f != NULL)
+        inicializarFila(f);
+
+    return f;
 }
-int tamanhoFila(const Fila *f)
+
+void inicializarFila(FilaPtr f)
 {
+    if (f == NULL)
+        return;
+
+    f->inicio = NULL;
+    f->fim = NULL;
+    f->tamanho = 0;
+}
+
+// Consultas
+
+int isVazia(const FilaPtr f)
+{
+    return f == NULL || f->inicio == NULL;
+}
+
+int tamanhoFila(const FilaPtr f)
+{
+    if (f == NULL)
+        return 0;
+
     return f->tamanho;
 }
 
-Estudante *inserirFila(Fila *f, Estudante **estudante)
+EstudantePtr buscarEstudanteEmFila(FilaPtr f, const int matricula)
 {
-    No *novoNo = malloc(sizeof(No));
-    if (novoNo == NULL)
+    if (f == NULL)
+        return NULL;
+
+    No *aux = buscarElementoEmFila(f, matricula);
+
+    if (aux == NULL)
+        return NULL;
+
+    return aux->estudante;
+}
+
+EstudantePtr consultarPrimeiro(FilaPtr f)
+{
+    if (isVazia(f))
+        return NULL;
+
+    return f->inicio->estudante;
+}
+
+// Impressão
+
+int imprimirFila(FilaPtr f)
+{
+    if (isVazia(f))
+        return 0;
+
+    No *aux = f->inicio;
+
+    while (aux != NULL)
     {
-        retun NULL;
+        printf("%d ", aux->estudante->matricula);
+        aux = aux->prox;
     }
-    novoNo->Estudante = estudante;
+
+    printf("\n");
+    return 1;
+}
+
+// Inserção
+
+int inserirFila(FilaPtr f, EstudantePtr estudante)
+{
+    if (f == NULL || estudante == NULL)
+        return 0;
+
+    No *novoNo = malloc(sizeof(No));
+
+    if (novoNo == NULL)
+        return 0;
+
+    novoNo->estudante = estudante;
     novoNo->prox = NULL;
 
     if (isVazia(f))
     {
         f->inicio = novoNo;
-        f->fim = novoNo;
     }
     else
     {
         f->fim->prox = novoNo;
-        f->fim = novoNo;
     }
+
+    f->fim = novoNo;
     f->tamanho++;
-    return estudante;
+
+    return 1;
 }
-int removerFila(Fila *f, Estudante **removido)
+
+// Remoção do primeiro elemento
+
+int removerFila(FilaPtr f, EstudantePtr *removido)
 {
     if (isVazia(f))
-    {
         return 0;
-    }
+
     No *noRemovido = f->inicio;
-    *removido = noRemovido->Estudante;
+
+    if (removido != NULL)
+        *removido = noRemovido->estudante;
+
     f->inicio = noRemovido->prox;
+
     if (f->inicio == NULL)
-    {
         f->fim = NULL;
-    }
 
     free(noRemovido);
     f->tamanho--;
+
     return 1;
 }
-void destruirFila(Fila *f)
-{
 
-    while (f->inicio != NULL)
-    {
-        No *noRemovido = f->inicio;
-        f->inicio = noRemovido->prox;
-        free(noRemovido);
-    }
+// Remoção de estudante específico
 
-    free(f);
-}
-
-Estudante *consultarPrimeiro(const Fila *f)
+int removerEsperaFila(FilaPtr f, const int matricula)
 {
     if (isVazia(f))
-        return f->inicio->Estudante;
+        return 0;
+
+    No *alvo = buscarElementoEmFila(f, matricula);
+
+    if (alvo == NULL)
+        return 0;
+
+    if (f->inicio == alvo)
+    {
+        f->inicio = alvo->prox;
+
+        if (f->inicio == NULL)
+            f->fim = NULL;
+    }
+    else
+    {
+        No *aux = f->inicio;
+
+        while (aux->prox != alvo)
+            aux = aux->prox;
+
+        aux->prox = alvo->prox;
+
+        if (f->fim == alvo)
+            f->fim = aux;
+    }
+
+    free(alvo);
+    f->tamanho--;
+
+    return 1;
+}
+
+// Remoção de todos os nós
+
+int deletarTudoFila(FilaPtr f)
+{
+    if (f == NULL)
+        return 0;
+
+    No *aux = f->inicio;
+
+    while (aux != NULL)
+    {
+        No *removido = aux;
+        aux = aux->prox;
+
+        free(removido);
+    }
+
+    f->inicio = NULL;
+    f->fim = NULL;
+    f->tamanho = 0;
+
+    return 1;
+}
+
+// Destruição da fila
+
+int destruirFila(FilaPtr f)
+{
+    if (f == NULL)
+        return 0;
+
+    deletarTudoFila(f);
+    free(f);
+
+    return 1;
 }

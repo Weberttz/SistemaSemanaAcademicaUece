@@ -7,4 +7,8 @@ typedef struct Estudante
     char nome[100];
 } Estudante;
 
+typedef struct Estudante *EstudantePtr;
+
+EstudantePtr criarEstudante(const int matricula, const char *nome);
+int getMatricula(EstudantePtr estudante);
 #endif

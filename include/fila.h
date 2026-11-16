@@ -2,17 +2,20 @@
 #define FILA_H
 
 #include "estudante.h"
+typedef struct Fila *FilaPtr;
 
-typedef struct Fila Fila;
+int isVazia(const FilaPtr *f);
+int tamanhoFila(const FilaPtr *f);
 
-Fila *inicializarFila(void);
-void destruirFila(Fila *f);
+int removerFila(FilaPtr *f, Estudante **removido);
+Estudante *consultarPrimeiro(const FilaPtr *f);
 
-int isVazia(const Fila *f);
-int tamanhoFila(const Fila *f);
-
-Estudante *inserirFila(Fila *f, Estudante **estudante);
-int removerFila(Fila *f, Estudante **removido);
-Estudante *consultarPrimeiro(const Fila *f);
+FilaPtr criarFila(void);
+EstudantePtr buscarEstudanteEmFila(FilaPtr fila, const int matricula);
+void inicializarFila(FilaPtr f);
+int imprimirFila(FilaPtr f);
+int inserirFila(FilaPtr f, EstudantePtr *estudante);
+int removerEsperaFila(FilaPtr f, const int matricula);
+int destruirFila(FilaPtr f);
 
 #endif
