@@ -14,6 +14,7 @@ int removerEstudanteAtividade(AtividadePtr atividade, const int matricula);
 int promoverFilaEspera(AtividadePtr atividade, EstudantePtr *promovido);
 void destruirAtividade(AtividadePtr atividade);
 int aumentarCapacidade(AtividadePtr atividade, const int incremento);
+int promoverEstudantes(AtividadePtr atividade, const int incremento);
 int getCodigo(AtividadePtr atividade);
 int getCapacidade(AtividadePtr atividade);
 int getQntEspera(AtividadePtr atividade);
