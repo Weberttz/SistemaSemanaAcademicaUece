@@ -41,6 +41,8 @@ EstadoComando executarCriar(NoArvore **raiz) {
 
     *raiz = inserirAtividadeNaArvore(*raiz, atividade);
 
+    if(raiz == NULL) return ENCERRAR;
+
     printf("OK CRIAR %d\n", codigo);
 
     return CONTINUAR;
@@ -224,7 +226,20 @@ EstadoComando executarAumentar(NoArvore *raiz) {
     if (resultado) {
         printf("OK AUMENTAR %d %d %d\n",
                codigo, getCapacidade(atividade), incremento);
+        resultado = promoverEstudantes(atividade, incremento);
     }
+
+    return CONTINUAR;
+}
+
+EstadoComando executarArvore(NoArvore *raiz){
+
+    int n, h;
+
+    n = getQntAtividade(raiz);
+    h = altura(raiz);
+
+    printf("ARVORE %d %d\n", n, h);
 
     return CONTINUAR;
 }
@@ -257,6 +272,9 @@ EstadoComando executarComando(const char *comando, NoArvore **raiz) {
         int resultado = listarAtividades(*raiz);
         return CONTINUAR;
     }
+
+    if (strcmp(comando, "ARVORE") == 0)
+        return executarArvore(*raiz);
 
     if (strcmp(comando, "FIM") == 0){
         printf("FIM\n");
