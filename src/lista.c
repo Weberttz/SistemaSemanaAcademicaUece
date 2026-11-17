@@ -73,7 +73,6 @@ int inserirNoInicio(ListaPtr l, EstudantePtr estudante){
 
     No *novo = malloc(sizeof(No));
     if (novo == NULL) {
-        printf("ERRO MEMÓRIA\n");
         return 0;
     }
 
@@ -99,7 +98,6 @@ int inserirNoFinal(ListaPtr l, EstudantePtr estudante){
 
     No *novo = malloc(sizeof(No));
     if (novo == NULL) {
-        printf("ERRO MEMÓRIA\n");
         return 0;
     }
 
@@ -168,7 +166,6 @@ int removerInscritoLista(ListaPtr l, const int matricula){
     }
 
     if(aux == NULL) {
-        printf("ERRO INTERNO_AO_REMOVER\n");
         return 0;
     }
     aux->prox = alvo->prox;

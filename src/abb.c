@@ -5,11 +5,6 @@
 #include "../include/abb.h"
 #include "../include/atividade.h"
 
-/*
- * Implementacao privada do TAD.
- * Observe a correspondencia com o slide 12:
- *   valor, ponteiro esquerdo (esq) e ponteiro direito (dir).
- */
 typedef struct NoArvore {
     struct NoArvore *esq;
     struct NoArvore *dir;

@@ -21,7 +21,6 @@ HistoricoPtr criarHistorico(void) {
     HistoricoPtr historico = malloc(sizeof(struct Historico));
 
     if (historico  == NULL) {
-        printf("ERRO MEMÓRIA\n");
         return 0;
     }
 

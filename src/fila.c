@@ -88,7 +88,6 @@ int inserirFila(FilaPtr f, EstudantePtr estudante){
 }
 int removerFila(FilaPtr f, EstudantePtr *removido){
     if(isVazia(f)){
-        printf("\nFila vazia!");
         return 0;
     }
     No *noRemovido = f->inicio;
@@ -125,7 +124,6 @@ int removerEsperaFila(FilaPtr f, const int matricula){
     }
 
     if(aux == NULL) {
-        printf("ERRO INTERNO_AO_REMOVER\n");
         return 0;
     }
     aux->prox = alvo->prox;
