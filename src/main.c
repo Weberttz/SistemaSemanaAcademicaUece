@@ -134,7 +134,10 @@ EstadoComando executarCancelar(NoArvore *raiz, HistoricoPtr historicoPtr){
         if(promocao) printf("PROMOVIDO %d %d\n", codigo, getMatricula(promovido));
         registrarEvento(historicoPtr, "PROMOCAO", codigo, getMatricula(promovido));
     }
-    else if(resultado_cacelar == 2) printf("OK CANCELADO_ESPERA %d %d\n", codigo, matricula);
+    else if(resultado_cacelar == 2) {
+        printf("OK CANCELADO_ESPERA %d %d\n", codigo, matricula);
+        registrarEvento(historicoPtr, "CANCEL_ESPERA", codigo, matricula);
+    }
 
     return CONTINUAR;
 }
@@ -239,6 +242,13 @@ EstadoComando executarAumentar(NoArvore *raiz, HistoricoPtr historicoPtr) {
         printf("OK AUMENTAR %d %d %d\n",
                codigo, getCapacidade(atividade), incremento);
         registrarEvento(historicoPtr, "AUMENTO_CAPACIDADE", codigo, 0);
+
+        // promoção de k alunos dps do incremento, sendo enviado aos registros.
+        for(int i=0; i<incremento; i++){
+            EstudantePtr promovido;
+            if(promoverFilaEspera(atividade, &promovido))
+                registrarEvento(historicoPtr, "PROMOCAO", codigo, getMatricula(promovido));
+        }
     }
 
     return CONTINUAR;
