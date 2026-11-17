@@ -100,18 +100,13 @@ EstadoComando executarInscrever(NoArvore *raiz, HistoricoPtr historicoPtr) {
         registrarEvento(historicoPtr, "ENTRADA_ESPERA", codigo, matricula);
     }
     else {
-        /*
-         * Válido somente se inscreverEstudante não
-         * armazenou nem liberou estudante na falha.
-         */
         free(estudante);
     }
-
-
 
     return CONTINUAR;
 }
 
+/* CANCELAR a m */
 EstadoComando executarCancelar(NoArvore *raiz, HistoricoPtr historicoPtr){
     int codigo, matricula;
 
@@ -191,6 +186,7 @@ EstadoComando executarInscritos(NoArvore *raiz) {
     return CONTINUAR;
 }
 
+/* ESPERA a */
 EstadoComando executarEspera(NoArvore *raiz){
     int codigo;
     if (scanf("%d", &codigo) != 1 || codigo <= 0) {
@@ -248,6 +244,12 @@ EstadoComando executarAumentar(NoArvore *raiz, HistoricoPtr historicoPtr) {
     return CONTINUAR;
 }
 
+EstadoComando executarRelatorio(NoArvore *raiz){
+    printf("RELATORIO %d\n", getQntAtividade(raiz));
+    listarAtividades(raiz, "RESUMO");
+    return CONTINUAR;
+}
+
 /* Interpretador de comandos */
 EstadoComando executarComando(const char *comando, NoArvore **raiz, HistoricoPtr historicoPtr) {
     if (strcmp(comando, "CRIAR") == 0){
@@ -275,10 +277,13 @@ EstadoComando executarComando(const char *comando, NoArvore **raiz, HistoricoPtr
     if (strcmp(comando, "HISTORICO") == 0)
         return executarHistorico(historicoPtr);
 
+    if (strcmp(comando, "RELATORIO") == 0)
+        return executarRelatorio(*raiz);
+
     if (strcmp(comando, "LISTAR") == 0) {
         printf("LISTAR %d\n", getQntAtividade(*raiz));
         //tratar esse resultado :
-        int resultado = listarAtividades(*raiz);
+        int resultado = listarAtividades(*raiz, "ATIVIDADE");
         return CONTINUAR;
     }
 
