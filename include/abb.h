@@ -50,11 +50,12 @@ int nivel(const NoArvore *raiz, const NoArvore *alvo);
 const NoArvore *encontrarPai(const NoArvore *raiz, const NoArvore *alvo);
 AtividadePtr buscarAtividade(const NoArvore *raiz, const int codigo);
 
-int listarAtividades(const NoArvore *raiz);
+void imprimirRelatorio(AtividadePtr atividade);
+int listarAtividades(const NoArvore *raiz, const char *titulo);
 
 /* Percursos recursivos: imprimem valores separados por espacos. */
 void preOrdem(const NoArvore *raiz); /* Raiz, Esquerda, Direita */
-void emOrdem(const NoArvore *raiz);  /* Esquerda, Raiz, Direita */
+void emOrdem(const NoArvore *raiz, const char *titulo);  /* Esquerda, Raiz, Direita */
 void posOrdem(const NoArvore *raiz); /* Esquerda, Direita, Raiz */
 
 /* Libera todos os nos abaixo de raiz, inclusive a propria raiz. */

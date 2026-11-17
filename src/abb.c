@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../include/abb.h"
 #include "../include/atividade.h"
 
@@ -148,13 +149,16 @@ void preOrdem(const NoArvore *raiz) {
     }
 }
 
-void emOrdem(const NoArvore *raiz) {
+void emOrdem(const NoArvore *raiz, const char *titulo) {
     if (raiz != NULL) {
-        emOrdem(raiz->esq);         /* 1. Esquerda */
-        printf("ATIVIDADE %d ", getCodigo(raiz->atividade)); /* 2. Raiz */
-        printf("%s ", getTitulo(raiz->atividade));
-        printf("%d\n", getCapacidade(raiz->atividade));
-        emOrdem(raiz->dir);         /* 3. Direita */
+        emOrdem(raiz->esq, titulo);         // 1. Esquerda 
+
+        if(!strcmp(titulo, "ATIVIDADE"))    // 2. Raiz
+            imprimirDados(raiz->atividade);
+        else
+            imprimirRelatorio(raiz->atividade);
+
+        emOrdem(raiz->dir, titulo);         // 3. Direita 
     }
 }
 
@@ -171,9 +175,9 @@ int getQntAtividade(const NoArvore *raiz){
     return raiz->qntAtividade;
 }
 
-int listarAtividades(const NoArvore *raiz){
+int listarAtividades(const NoArvore *raiz, const char *titulo){
     if( raiz == NULL) return 0;
-    emOrdem(raiz);
+    emOrdem(raiz, titulo);
     return 1;
 }
 

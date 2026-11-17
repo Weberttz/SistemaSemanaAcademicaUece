@@ -82,6 +82,12 @@ void imprimirDados(AtividadePtr atividade){
     atividade->qntInscritos, atividade->qntEspera);
 }
 
+void imprimirRelatorio(AtividadePtr atividade){
+    printf("RESUMO %d %d %d %d\n", 
+    atividade->codigo, atividade->capacidade, 
+    atividade->qntInscritos, atividade->qntEspera);
+}
+
 int inscreverEstudante(AtividadePtr atividade, EstudantePtr estudante){
     if(atividade == NULL) return -1;
 
