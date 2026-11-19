@@ -5,27 +5,26 @@
 
 #define MAX_CARACTERES 100
 
-typedef struct Estudante{
-    int matricula;
-    char nome[100];
-}Estudante;
-
-typedef struct No{
+typedef struct No
+{
     EstudantePtr estudante;
     struct No *prox;
-}No;
+} No;
 
-typedef struct ListaInscritos{
+typedef struct ListaInscritos
+{
     No *inicio;
     No *fim;
     size_t tamanho;
-}ListaInscritos;
+} ListaInscritos;
 
-static No *buscarElemento(ListaPtr l, int matricula){
+static No *buscarElemento(ListaPtr l, int matricula)
+{
     No *aux = l->inicio;
-    
-    while(aux != NULL){
-        if (aux->estudante->matricula == matricula)
+
+    while (aux != NULL)
+    {
+        if (getMatricula(aux->estudante) == matricula)
             return aux;
         aux = aux->prox;
     }
@@ -33,11 +32,13 @@ static No *buscarElemento(ListaPtr l, int matricula){
     return NULL;
 }
 
-EstudantePtr buscarEstudanteEmLista(ListaPtr l, int matricula){
+EstudantePtr buscarEstudanteEmLista(ListaPtr l, int matricula)
+{
     No *aux = l->inicio;
-    
-    while(aux != NULL){
-        if (aux->estudante->matricula == matricula)
+
+    while (aux != NULL)
+    {
+        if (getMatricula(aux->estudante) == matricula)
             return aux->estudante;
         aux = aux->prox;
     }
@@ -45,43 +46,52 @@ EstudantePtr buscarEstudanteEmLista(ListaPtr l, int matricula){
     return NULL;
 }
 
-ListaPtr criarLista(){
+ListaPtr criarLista()
+{
     ListaPtr l = malloc(sizeof(ListaInscritos));
-    if (l != NULL) {
-       inicializarLista(l);
+    if (l != NULL)
+    {
+        inicializarLista(l);
     }
     return l;
 }
 
-int inicializarLista(ListaPtr l){
-   l->inicio = NULL;
-   l->fim = NULL;
-   l->tamanho = 0;
-   return 1;
+int inicializarLista(ListaPtr l)
+{
+    l->inicio = NULL;
+    l->fim = NULL;
+    l->tamanho = 0;
+    return 1;
 }
 
-int listaVazia(ListaPtr l){
-    return (l->inicio == NULL)?1:0;
+int listaVazia(ListaPtr l)
+{
+    return (l->inicio == NULL) ? 1 : 0;
 }
 
-int inserirNoInicio(ListaPtr l, EstudantePtr estudante){
-    No *no_busca = buscarElemento(l, estudante->matricula);
-    if(no_busca != NULL){
+int inserirNoInicio(ListaPtr l, EstudantePtr estudante)
+{
+    No *no_busca = buscarElemento(l, getMatricula(estudante));
+    if (no_busca != NULL)
+    {
         printf("ERRO ALUNO_DUPLICADO\n");
         return 0;
     }
 
     No *novo = malloc(sizeof(No));
-    if (novo == NULL) {
+    if (novo == NULL)
+    {
         return 0;
     }
 
     novo->estudante = estudante;
 
-    if(novo->estudante == NULL) return 0;
+    if (novo->estudante == NULL)
+        return 0;
 
     // Se a lista estiver vazia, ao inserir no inicio, ambos os ponteiros devem apontar para o Nó
-    if(listaVazia(l)) l->fim = novo;
+    if (listaVazia(l))
+        l->fim = novo;
 
     novo->prox = l->inicio;
 
@@ -89,23 +99,28 @@ int inserirNoInicio(ListaPtr l, EstudantePtr estudante){
     return 1;
 }
 
-int inserirNoFinal(ListaPtr l, EstudantePtr estudante){
-    No *no_busca = buscarElemento(l, estudante->matricula);
-    if(no_busca != NULL){
+int inserirNoFinal(ListaPtr l, EstudantePtr estudante)
+{
+    No *no_busca = buscarElemento(l, getMatricula(estudante));
+    if (no_busca != NULL)
+    {
         printf("ERRO ALUNO_DUPLICADO\n");
         return 0;
     }
 
     No *novo = malloc(sizeof(No));
-    if (novo == NULL) {
+    if (novo == NULL)
+    {
         return 0;
     }
 
     novo->estudante = estudante;
-    if(novo->estudante == NULL) return 0;
+    if (novo->estudante == NULL)
+        return 0;
     novo->prox = NULL;
 
-    if(listaVazia(l)) {
+    if (listaVazia(l))
+    {
         l->inicio = novo;
         l->fim = novo;
         return 1;
@@ -116,25 +131,30 @@ int inserirNoFinal(ListaPtr l, EstudantePtr estudante){
     return 1;
 }
 
-int imprimirLista(ListaPtr l){
+int imprimirLista(ListaPtr l)
+{
     No *aux = l->inicio;
 
-    if(listaVazia(l)) return 0;
+    if (listaVazia(l))
+        return 0;
 
     EstudantePtr estudante;
-    while(aux != NULL){
+    while (aux != NULL)
+    {
         estudante = aux->estudante;
-        printf("%d ", estudante->matricula);
+        printf("%d ", getMatricula(estudante));
         aux = aux->prox;
     }
 
     return 1;
 }
 
-int alterarElemento(ListaPtr l,const int matriculaEstudanteSubstituido, EstudantePtr estudante){
+int alterarElemento(ListaPtr l, const int matriculaEstudanteSubstituido, EstudantePtr estudante)
+{
     No *no_substiuido = buscarElemento(l, matriculaEstudanteSubstituido);
 
-    if(no_substiuido == NULL) {
+    if (no_substiuido == NULL)
+    {
         printf("ERRO ALUNO_NAO_ENCONTRADO\n");
         return 0;
     }
@@ -143,16 +163,19 @@ int alterarElemento(ListaPtr l,const int matriculaEstudanteSubstituido, Estudant
     return 1;
 }
 
-int removerInscritoLista(ListaPtr l, const int matricula){
+int removerInscritoLista(ListaPtr l, const int matricula)
+{
     No *alvo = buscarElemento(l, matricula);
     No *aux = l->inicio;
 
-    if(alvo == NULL) {
+    if (alvo == NULL)
+    {
         return 0;
     }
 
     // Se alvo está no início da lista, libera corretamente
-    if(l->inicio == alvo){
+    if (l->inicio == alvo)
+    {
         l->inicio = alvo->prox;
         free(alvo->estudante);
         free(alvo);
@@ -161,27 +184,33 @@ int removerInscritoLista(ListaPtr l, const int matricula){
     }
 
     // Se alvo está na cauda da lista
-    while(aux != NULL && aux->prox !=alvo){
+    while (aux != NULL && aux->prox != alvo)
+    {
         aux = aux->prox;
     }
 
-    if(aux == NULL) {
+    if (aux == NULL)
+    {
         return 0;
     }
     aux->prox = alvo->prox;
     free(alvo->estudante);
     free(alvo);
-    if(aux->prox == NULL) l->fim = aux;
+    if (aux->prox == NULL)
+        l->fim = aux;
 
     return 1;
 }
 
-int deletarTudoLista(ListaPtr l){
+int deletarTudoLista(ListaPtr l)
+{
     No *aux = l->inicio;
 
-    if (listaVazia(l)) return 0;
+    if (listaVazia(l))
+        return 0;
 
-    while (aux != NULL) {
+    while (aux != NULL)
+    {
         l->inicio = aux->prox;
         free(aux->estudante);
         free(aux);
@@ -195,7 +224,8 @@ int deletarTudoLista(ListaPtr l){
     return 1;
 }
 
-void destruirLista(ListaPtr *l){
+void destruirLista(ListaPtr *l)
+{
     if (l == NULL || *l == NULL)
         return;
     deletarTudoLista(*l);
