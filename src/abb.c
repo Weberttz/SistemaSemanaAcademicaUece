@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include "../include/abb.h"
@@ -19,7 +18,7 @@ AtividadePtr buscarAtividade(const NoArvore *raiz, const int codigo) {
     return buscarAtividade(codigo < c ? raiz->esq : raiz->dir, codigo);
 }
 
-NoArvore *criarNoArvore(AtividadePtr a) {
+static NoArvore *criarNoArvore(AtividadePtr a) {
     if (a == NULL) return NULL;
 
     NoArvore *novo = malloc(sizeof *novo);
@@ -33,32 +32,12 @@ NoArvore *criarNoArvore(AtividadePtr a) {
     return novo;
 }
 
-NoArvore *inserirEsquerda(NoArvore *pai, AtividadePtr atividade) {
-    if (pai == NULL) {
-        NoArvore *filho = criarNoArvore(atividade);
-        return filho;
-    }
-    
-    pai->esq = inserirEsquerda(pai->esq, atividade);
-    return pai;
-}
-
-NoArvore *inserirDireita(NoArvore *pai, const AtividadePtr atividade) {
-    if (pai == NULL) {
-        NoArvore *filho = criarNoArvore(atividade);
-        return filho;
-    }
-    
-    pai->dir = inserirDireita(pai->dir, atividade);
-    return pai;
-}
-
 NoArvore *inserirAtividadeNaArvore(NoArvore* raiz, AtividadePtr atividade){
     if (raiz == NULL){
         return criarNoArvore(atividade);
     }
 
-    if(valorNoArvore(raiz) < getCodigo(atividade))
+    if(getCodigo(raiz->atividade) < getCodigo(atividade))
         raiz->dir = inserirAtividadeNaArvore(raiz->dir, atividade);
     else{
         raiz->esq = inserirAtividadeNaArvore(raiz->esq, atividade);
@@ -67,23 +46,6 @@ NoArvore *inserirAtividadeNaArvore(NoArvore* raiz, AtividadePtr atividade){
     raiz->qntAtividade++;
 
     return raiz;
-}
-
-int valorNoArvore(const NoArvore *no) {
-    assert(no != NULL);
-    return getCodigo(no->atividade);
-}
-
-const NoArvore *filhoEsquerdo(const NoArvore *no) {
-    return no == NULL ? NULL : no->esq;
-}
-
-const NoArvore *filhoDireito(const NoArvore *no) {
-    return no == NULL ? NULL : no->dir;
-}
-
-bool ehFolha(const NoArvore *no) {
-    return no != NULL && no->esq == NULL && no->dir == NULL;
 }
 
 int altura(const NoArvore *raiz) {
@@ -100,51 +62,7 @@ int altura(const NoArvore *raiz) {
     return 1 + maior;
 }
 
-int nivel(const NoArvore *raiz, const NoArvore *alvo) {
-    if (raiz == NULL || alvo == NULL) {
-        return -1;
-    }
-    if (raiz == alvo) {
-        return 0;
-    }
-
-    int nivelEsquerdo = nivel(raiz->esq, alvo);
-    if (nivelEsquerdo != -1) {
-        return nivelEsquerdo + 1;
-    }
-
-    int nivelDireito = nivel(raiz->dir, alvo);
-    if (nivelDireito != -1) {
-        return nivelDireito + 1;
-    }
-
-    return -1;
-}
-
-const NoArvore *encontrarPai(const NoArvore *raiz, const NoArvore *alvo) {
-    if (raiz == NULL || alvo == NULL || raiz == alvo) {
-        return NULL;
-    }
-    if (raiz->esq == alvo || raiz->dir == alvo) {
-        return raiz;
-    }
-
-    const NoArvore *pai = encontrarPai(raiz->esq, alvo);
-    if (pai != NULL) {
-        return pai;
-    }
-    return encontrarPai(raiz->dir, alvo);
-}
-
-void preOrdem(const NoArvore *raiz) {
-    if (raiz != NULL) {
-        printf("%d ", getCodigo(raiz->atividade)); /* 1. Raiz */
-        preOrdem(raiz->esq);        /* 2. Esquerda */
-        preOrdem(raiz->dir);        /* 3. Direita */
-    }
-}
-
-void emOrdem(const NoArvore *raiz, const char *titulo) {
+static void emOrdem(const NoArvore *raiz, const char *titulo) {
     if (raiz != NULL) {
         emOrdem(raiz->esq, titulo);         // 1. Esquerda 
 
@@ -154,14 +72,6 @@ void emOrdem(const NoArvore *raiz, const char *titulo) {
             imprimirRelatorio(raiz->atividade);
 
         emOrdem(raiz->dir, titulo);         // 3. Direita 
-    }
-}
-
-void posOrdem(const NoArvore *raiz) {
-    if (raiz != NULL) {
-        posOrdem(raiz->esq);        /* 1. Esquerda */
-        posOrdem(raiz->dir);        /* 2. Direita */
-        printf("%d ", getCodigo(raiz->atividade)); /* 3. Raiz */
     }
 }
 

@@ -14,6 +14,8 @@ typedef struct Fila
     No *fim;
 } Fila;
 
+static void inicializarFila(FilaPtr f);
+
 static No *buscarElementoEmFila(FilaPtr l, int matricula)
 {
     No *aux = l->inicio;
@@ -52,12 +54,12 @@ EstudantePtr buscarEstudanteEmFila(FilaPtr fila, const int matricula)
     return NULL;
 }
 
-void inicializarFila(FilaPtr f)
+static void inicializarFila(FilaPtr f)
 {
     f->inicio = NULL;
     f->fim = NULL;
 }
-int isVazia(FilaPtr f)
+static int isVazia(FilaPtr f)
 {
     return (f->inicio == NULL);
 }
@@ -155,12 +157,7 @@ int removerEsperaFila(FilaPtr f, const int matricula)
     return 1;
 }
 
-EstudantePtr consultarPrimeiro(FilaPtr f)
-{
-    return f->inicio->estudante;
-}
-
-int deletarTudoFila(FilaPtr f)
+static int deletarTudoFila(FilaPtr f)
 {
     No *aux = f->inicio;
 

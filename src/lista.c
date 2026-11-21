@@ -18,6 +18,8 @@ typedef struct ListaInscritos
     size_t tamanho;
 } ListaInscritos;
 
+static int inicializarLista(ListaPtr l);
+
 static No *buscarElemento(ListaPtr l, int matricula)
 {
     No *aux = l->inicio;
@@ -56,7 +58,7 @@ ListaPtr criarLista()
     return l;
 }
 
-int inicializarLista(ListaPtr l)
+static int inicializarLista(ListaPtr l)
 {
     l->inicio = NULL;
     l->fim = NULL;
@@ -64,39 +66,9 @@ int inicializarLista(ListaPtr l)
     return 1;
 }
 
-int listaVazia(ListaPtr l)
+static int listaVazia(ListaPtr l)
 {
     return (l->inicio == NULL) ? 1 : 0;
-}
-
-int inserirNoInicio(ListaPtr l, EstudantePtr estudante)
-{
-    No *no_busca = buscarElemento(l, getMatricula(estudante));
-    if (no_busca != NULL)
-    {
-        printf("ERRO ALUNO_DUPLICADO\n");
-        return 0;
-    }
-
-    No *novo = malloc(sizeof(No));
-    if (novo == NULL)
-    {
-        return 0;
-    }
-
-    novo->estudante = estudante;
-
-    if (novo->estudante == NULL)
-        return 0;
-
-    // Se a lista estiver vazia, ao inserir no inicio, ambos os ponteiros devem apontar para o Nó
-    if (listaVazia(l))
-        l->fim = novo;
-
-    novo->prox = l->inicio;
-
-    l->inicio = novo;
-    return 1;
 }
 
 int inserirNoFinal(ListaPtr l, EstudantePtr estudante)
@@ -149,20 +121,6 @@ int imprimirLista(ListaPtr l)
     return 1;
 }
 
-int alterarElemento(ListaPtr l, const int matriculaEstudanteSubstituido, EstudantePtr estudante)
-{
-    No *no_substiuido = buscarElemento(l, matriculaEstudanteSubstituido);
-
-    if (no_substiuido == NULL)
-    {
-        printf("ERRO ALUNO_NAO_ENCONTRADO\n");
-        return 0;
-    }
-
-    no_substiuido->estudante = estudante;
-    return 1;
-}
-
 int removerInscritoLista(ListaPtr l, const int matricula)
 {
     No *alvo = buscarElemento(l, matricula);
@@ -202,7 +160,7 @@ int removerInscritoLista(ListaPtr l, const int matricula)
     return 1;
 }
 
-int deletarTudoLista(ListaPtr l)
+static int deletarTudoLista(ListaPtr l)
 {
     No *aux = l->inicio;
 
