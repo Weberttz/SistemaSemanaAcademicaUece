@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
-declare -a nomes=("Jonh" "Antônio" "Rafael" "Davi" "Marina" "Gabrielle" "Mell" "Maria" "Miguel" "Luís" "Arthur" "Marcelo" "Gabriel" "Pedro" "Thiciane" "Murilo")
-declare -a sobrenomes=("Lima" "Souza" "Silva" "Filho" "Galdino" "Maia" "Aguiar" "Galdêncio" "Santos" "Oliveira" "Pereira" "Ferreira" "Alves")
 declare -a atividades=()
 declare -a codigos
 declare -a matriculas
-contador=1
 min=1
-max=32784
+contador=1
+max_capacidade=10
 
 caminho="./tests/t06.in"
 >$caminho
@@ -17,19 +15,17 @@ for i in {1..300}; do
 done
 
 for atividade in ${atividades[@]}; do
-    k=$(( $RANDOM % 50 + 1 ))
-    codigos+=("$k")
+    k=$(( $RANDOM % $max_capacidade + 1 ))
+    codigos+=("$contador")
     echo "CRIAR $contador $k $atividade" >> $caminho
     (( contador++ ))
 done
 
-for palavra in "${nomes[@]}"; do
-    for sufixo in "${sobrenomes[@]}"; do
-        a=$(( $RANDOM % 30 + 1))
-        m=$(( $RANDOM % ($max - $min + 1) + $min ))
-        matriculas+=("$m")
-        echo "INSCREVER $a $m ${palavra}_${sufixo}"
-    done >> $caminho
+(( contador-- ))
+
+for i in {1..5000}; do
+    a=$(( $RANDOM % ($contador - $min + 1) + $min ))
+    echo "INSCREVER $a $i nome_$i" >> $caminho
 done
 
 echo "FIM" >> $caminho

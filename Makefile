@@ -1,4 +1,5 @@
 # My third makefile
+# Fonte: https://embarcados.com.br/introducao-ao-makefile/
 
 # Name of the project
 PROJ_NAME=programa
