@@ -2,7 +2,7 @@
 # Fonte: https://embarcados.com.br/introducao-ao-makefile/
 
 # Name of the project
-PROJ_NAME=programa
+PROJ_NAME=./bin/eventos
 
 # .c files
 C_SOURCE=$(wildcard ./src/*.c)
@@ -31,7 +31,7 @@ RM = rm -rf
 #
 # Compilation and linking
 #
-all: checkEmpty objFolder $(PROJ_NAME)
+all: checkEmpty objFolder binFolder $(PROJ_NAME)
 
 checkEmpty:
 	@ if [ -z "$(C_SOURCE)" ]; then \
@@ -63,9 +63,11 @@ $(PROJ_NAME): $(OBJ)
 
 objFolder:
 	@ mkdir -p objects
+	@ mkdir -p bin
 
 clean:
 	@ $(RM) ./objects/*.o $(PROJ_NAME) *~
-	@ rmdir objects
+	@ rmdir objects 2>/dev/null || true
+	@ rmdir bin 2>/dev/null || true
 
-.PHONY: all clean checkFolder objFolder
+.PHONY: all clean checkFolder objFolder binFolder
