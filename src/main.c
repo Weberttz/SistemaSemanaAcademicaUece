@@ -15,6 +15,10 @@ void imprimirErroParametros(void) {
     printf("ERRO PARAMETROS\n");
 }
 
+EstadoComando executarArvore(NoArvore *raiz){
+    printf("ARVORE %d %d\n", getQntAtividade(raiz), altura(raiz));
+    return CONTINUAR;
+}
 
 EstadoComando executarHistorico(HistoricoPtr historicoPtr){
     imprimirHistorico(historicoPtr);
@@ -28,17 +32,17 @@ EstadoComando executarCriar(NoArvore **raiz, HistoricoPtr historicoPtr) {
 
     if (scanf("%d %d %99s", &codigo, &capacidade, titulo) != 3) {
         imprimirErroParametros();
-        return ENCERRAR;
+        return CONTINUAR;
     }
 
     if(capacidade <= 0 || codigo <= 0){
         imprimirErroParametros();
-        return ENCERRAR;
+        return CONTINUAR;
     }
 
     if (buscarAtividade(*raiz, codigo) != NULL) {
-        printf("ERRO ATIVIDADE_EXISTE");
-        return ENCERRAR;
+        printf("ERRO ATIVIDADE_EXISTE\n");
+        return CONTINUAR;
     }
 
     AtividadePtr atividade = criarAtividade(codigo, capacidade, titulo);
@@ -62,26 +66,26 @@ EstadoComando executarInscrever(NoArvore *raiz, HistoricoPtr historicoPtr) {
 
     if (scanf("%d %d %99s", &codigo, &matricula, nome) != 3) {
         imprimirErroParametros();
-        return ENCERRAR;
+        return CONTINUAR;
     }
 
     if(matricula <= 0 || codigo <= 0){
         imprimirErroParametros();
-        return ENCERRAR;
+        return CONTINUAR;
     }
 
     AtividadePtr atividade = buscarAtividade(raiz, codigo);
 
     if (atividade == NULL) {
-        printf("ERRO ATIVIDADE_INEXISTENTE");
-        return ENCERRAR;
+        printf("ERRO ATIVIDADE_INEXISTENTE\n");
+        return CONTINUAR;
     }
 
     EstudantePtr e = buscarEstudanteEmAtividade(atividade, matricula);
 
     if(e != NULL){
-        printf("ERRO ESTUDANTE_DUPLICADO");
-        return ENCERRAR;
+        printf("ERRO ALUNO_DUPLICADO\n");
+        return CONTINUAR;
     }
 
     EstudantePtr estudante = criarEstudante(matricula, nome);
@@ -112,17 +116,22 @@ EstadoComando executarCancelar(NoArvore *raiz, HistoricoPtr historicoPtr){
 
     if (scanf("%d %d", &codigo, &matricula) != 2) {
         imprimirErroParametros();
-        return ENCERRAR;
+        return CONTINUAR;
     }
 
     AtividadePtr atividade = buscarAtividade(raiz, codigo);
 
     if(atividade == NULL){
-        printf("ERRO ATIVIDADE_INEXISTENTE");
-        return ENCERRAR;
+        printf("ERRO ATIVIDADE_INEXISTENTE\n");
+        return CONTINUAR;
     }
 
     int resultado_cacelar = removerEstudanteAtividade(atividade, matricula);
+
+    if(!resultado_cacelar){
+        printf("ERRO ALUNO_NAO_ENCONTRADO\n");
+        return CONTINUAR;
+    }
 
     if(resultado_cacelar == 1) {
         printf("OK CANCELADO_INSCRITO %d %d\n", codigo, matricula);
@@ -148,13 +157,13 @@ EstadoComando executarBuscar(NoArvore *raiz) {
 
     if (scanf("%d", &codigo) != 1) {
         imprimirErroParametros();
-        return ENCERRAR;
+        return CONTINUAR;
     }
 
     AtividadePtr atividade = buscarAtividade(raiz, codigo);
     if (atividade == NULL) {
-        printf("ERRO ATIVIDADE_INEXISTENTE");
-        return ENCERRAR;
+        printf("ERRO ATIVIDADE_INEXISTENTE\n");
+        return CONTINUAR;
     }
     imprimirDados(atividade);
 
@@ -167,14 +176,14 @@ EstadoComando executarInscritos(NoArvore *raiz) {
 
     if (scanf("%d", &codigo) != 1 || codigo <= 0) {
         imprimirErroParametros();
-        return ENCERRAR;
+        return CONTINUAR;
     }
 
     AtividadePtr atividade = buscarAtividade(raiz, codigo);
 
     if (atividade == NULL) {
-        printf("ERRO ATIVIDADE_INEXISTENTE");
-        return ENCERRAR;
+        printf("ERRO ATIVIDADE_INEXISTENTE\n");
+        return CONTINUAR;
     }
 
     printf("INSCRITOS %d ", codigo);
@@ -194,14 +203,14 @@ EstadoComando executarEspera(NoArvore *raiz){
     int codigo;
     if (scanf("%d", &codigo) != 1 || codigo <= 0) {
         imprimirErroParametros();
-        return ENCERRAR;
+        return CONTINUAR;
     }
 
     AtividadePtr atividade = buscarAtividade(raiz, codigo);
 
     if (atividade == NULL) {
-        printf("ERRO ATIVIDADE_INEXISTENTE");
-        return ENCERRAR;
+        printf("ERRO ATIVIDADE_INEXISTENTE\n");
+        return CONTINUAR;
     }
 
     printf("ESPERA %d ", codigo);
@@ -221,19 +230,19 @@ EstadoComando executarAumentar(NoArvore *raiz, HistoricoPtr historicoPtr) {
 
     if (scanf("%d %d", &codigo, &incremento) != 2) {
         imprimirErroParametros();
-        return ENCERRAR;
+        return CONTINUAR;
     }
 
     if(codigo <= 0 || incremento <= 0){
         imprimirErroParametros();
-        return ENCERRAR;
+        return CONTINUAR;
     }
 
     AtividadePtr atividade = buscarAtividade(raiz, codigo);
 
     if (atividade == NULL){
-        printf("ERRO ATIVIDADE_INEXISTENTE");
-        return ENCERRAR;
+        printf("ERRO ATIVIDADE_INEXISTENTE\n");
+        return CONTINUAR;
     }
 
     int resultado = aumentarCapacidade(atividade, incremento);
@@ -284,21 +293,23 @@ EstadoComando executarComando(const char *comando, NoArvore **raiz, HistoricoPtr
     if (strcmp(comando, "ESPERA") == 0)
         return executarEspera(*raiz);
 
+    if (strcmp(comando, "LISTAR") == 0) {
+        printf("LISTAR %d\n", getQntAtividade(*raiz));
+        listarAtividades(*raiz, "ATIVIDADE");
+        return CONTINUAR;
+    }
+
+    if (strcmp(comando, "ARVORE") == 0)
+        return executarArvore(*raiz);
+
     if (strcmp(comando, "HISTORICO") == 0)
         return executarHistorico(historicoPtr);
 
     if (strcmp(comando, "RELATORIO") == 0)
         return executarRelatorio(*raiz);
 
-    if (strcmp(comando, "LISTAR") == 0) {
-        printf("LISTAR %d\n", getQntAtividade(*raiz));
-        //tratar esse resultado :
-        int resultado = listarAtividades(*raiz, "ATIVIDADE");
-        return CONTINUAR;
-    }
-
     if (strcmp(comando, "FIM") == 0){
-        printf("FIM\n");
+        printf("FIM");
         return ENCERRAR;
     }
 
