@@ -96,11 +96,11 @@ EstadoComando executarInscrever(NoArvore *raiz, HistoricoPtr historicoPtr) {
     int resultado = inscreverEstudante(atividade, estudante);
 
     if (resultado == 1) {
-        printf("OK INSCRITO %d %s\n", matricula, nome);
+        printf("OK INSCRITO %d %d\n", codigo, matricula);
         registrarEvento(historicoPtr, "INSCRICAO", codigo, matricula);
     }
     else if (resultado == 2) {
-        printf("OK ESPERA %d %s %d\n", matricula, nome, getQntEspera(atividade) - 1);
+        printf("OK ESPERA %d %d %d\n", codigo, matricula, getQntEspera(atividade));
         registrarEvento(historicoPtr, "ENTRADA_ESPERA", codigo, matricula);
     }
     else {
@@ -255,8 +255,10 @@ EstadoComando executarAumentar(NoArvore *raiz, HistoricoPtr historicoPtr) {
         // promoção de k alunos dps do incremento, sendo enviado aos registros.
         for(int i=0; i<incremento; i++){
             EstudantePtr promovido;
-            if(promoverFilaEspera(atividade, &promovido))
+            if(promoverFilaEspera(atividade, &promovido)){
                 registrarEvento(historicoPtr, "PROMOCAO", codigo, getMatricula(promovido));
+                printf("PROMOVIDO %d %d\n", codigo, getMatricula(promovido));
+            }
         }
     }
 
