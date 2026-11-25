@@ -3,13 +3,8 @@
 #include <string.h>
 #include "../include/abb.h"
 #include "../include/atividade.h"
+#include "../include/no_arvore.h"
 
-typedef struct NoArvore {
-    struct NoArvore *esq;
-    struct NoArvore *dir;
-    AtividadePtr atividade;
-    int qntAtividade;
-}NoArvore;
 
 AtividadePtr buscarAtividade(const NoArvore *raiz, const int codigo) {
     if (raiz == NULL) return NULL;
@@ -18,35 +13,6 @@ AtividadePtr buscarAtividade(const NoArvore *raiz, const int codigo) {
     return buscarAtividade(codigo < c ? raiz->esq : raiz->dir, codigo);
 }
 
-static NoArvore *criarNoArvore(AtividadePtr a) {
-    if (a == NULL) return NULL;
-
-    NoArvore *novo = malloc(sizeof *novo);
-    if (novo == NULL) return NULL;
-
-    novo->atividade = a;
-
-    novo->esq = NULL;
-    novo->dir = NULL;
-    novo->qntAtividade = 1;
-    return novo;
-}
-
-NoArvore *inserirAtividadeNaArvore(NoArvore* raiz, AtividadePtr atividade){
-    if (raiz == NULL){
-        return criarNoArvore(atividade);
-    }
-
-    if(getCodigo(raiz->atividade) < getCodigo(atividade))
-        raiz->dir = inserirAtividadeNaArvore(raiz->dir, atividade);
-    else{
-        raiz->esq = inserirAtividadeNaArvore(raiz->esq, atividade);
-    }
-
-    raiz->qntAtividade++;
-
-    return raiz;
-}
 
 int altura(const NoArvore *raiz) {
     if (raiz == NULL) {

@@ -1,6 +1,7 @@
 #ifndef ABB_H
 #define ABB_H
 #include "atividade.h"
+#include "avl.h"
 
 /*
  * TAD Arvore Binaria - Aula 15
@@ -11,7 +12,6 @@
  * ATENCAO: esta e uma arvore binaria comum, NAO uma arvore de busca.
  * A posicao de cada filho e definida explicitamente pelo programa.
  */
-typedef struct NoArvore NoArvore;
 
 NoArvore *inserirAtividadeNaArvore(NoArvore *raiz, AtividadePtr atividade);
 
